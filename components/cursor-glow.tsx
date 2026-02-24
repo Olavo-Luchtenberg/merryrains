@@ -77,122 +77,109 @@ export function CursorGlow() {
     const drawWaterDrop = (time: number) => {
       ctx.clearRect(0, 0, canvas.width, canvas.height)
 
-      // Smooth follow with easing
-      const ease = 0.15
+      const ease = 0.14
       smoothMouse.current.x += (mouse.current.x - smoothMouse.current.x) * ease
       smoothMouse.current.y += (mouse.current.y - smoothMouse.current.y) * ease
 
-      // Calculate velocity for squish effect
       velocity.current.x = mouse.current.x - prevMouse.current.x
       velocity.current.y = mouse.current.y - prevMouse.current.y
       prevMouse.current = { ...mouse.current }
 
       const cx = smoothMouse.current.x
       const cy = smoothMouse.current.y
-      const baseRadius = hoveringRef.current ? 22 : 16
+      const baseRadius = hoveringRef.current ? 20 : 14
       const speed = Math.sqrt(velocity.current.x ** 2 + velocity.current.y ** 2)
-
-      // Squish based on movement
-      const squish = Math.min(speed * 0.015, 0.25)
+      const squish = Math.min(speed * 0.012, 0.15)
       const angle = Math.atan2(velocity.current.y, velocity.current.x)
-
-      // Subtle wobble animation
-      const wobble = Math.sin(time * 0.004) * 0.5
+      const wobble = Math.sin(time * 0.003) * 0.3
 
       ctx.save()
       ctx.translate(cx, cy)
       ctx.rotate(angle)
 
       const rx = baseRadius * (1 + squish) + wobble
-      const ry = baseRadius * (1 - squish * 0.5) - wobble * 0.5
+      const ry = baseRadius * (1 - squish * 0.4) - wobble * 0.3
 
-      // Outer glow - mais transparente para parecer gota de água
-      const outerGlow = ctx.createRadialGradient(0, 0, rx * 0.8, 0, 0, rx * 2.5)
-      outerGlow.addColorStop(0, "rgba(100, 200, 255, 0.05)")
-      outerGlow.addColorStop(1, "rgba(100, 200, 255, 0)")
-      ctx.fillStyle = outerGlow
-      ctx.beginPath()
-      ctx.ellipse(0, 0, rx * 2.5, ry * 2.5, 0, 0, Math.PI * 2)
-      ctx.fill()
-
-      // Main water body - circular droplet
+      // 1) Corpo principal – gota escura azul-cinza, translúcida (como na referência)
       ctx.beginPath()
       ctx.ellipse(0, 0, rx, ry, 0, 0, Math.PI * 2)
-
-      // Water gradient - gota mais transparente, aspecto de água real
-      const waterGrad = ctx.createRadialGradient(
-        -rx * 0.3, -ry * 0.3, rx * 0.1,
-        0, 0, rx
+      const bodyGrad = ctx.createRadialGradient(
+        -rx * 0.2, -ry * 0.25, 0,
+        0, 0, rx * 1.1
       )
-      waterGrad.addColorStop(0, "rgba(180, 230, 255, 0.35)")
-      waterGrad.addColorStop(0.3, "rgba(100, 190, 240, 0.28)")
-      waterGrad.addColorStop(0.6, "rgba(50, 140, 210, 0.24)")
-      waterGrad.addColorStop(0.85, "rgba(30, 100, 180, 0.3)")
-      waterGrad.addColorStop(1, "rgba(20, 70, 150, 0.32)")
-      ctx.fillStyle = waterGrad
+      bodyGrad.addColorStop(0, "rgba(120, 160, 200, 0.5)")
+      bodyGrad.addColorStop(0.35, "rgba(60, 100, 140, 0.45)")
+      bodyGrad.addColorStop(0.7, "rgba(30, 60, 95, 0.5)")
+      bodyGrad.addColorStop(1, "rgba(15, 35, 65, 0.55)")
+      ctx.fillStyle = bodyGrad
       ctx.fill()
 
-      // Borda sutil - mais transparente
-      ctx.strokeStyle = "rgba(160, 220, 255, 0.2)"
-      ctx.lineWidth = 1
-      ctx.stroke()
-
-      // Inner reflection - bottom right (refracted light)
+      // 2) Destaque principal – mancha branca forte no topo (luz direta)
       ctx.beginPath()
-      ctx.ellipse(rx * 0.15, ry * 0.2, rx * 0.6, ry * 0.5, Math.PI * 0.2, 0, Math.PI * 2)
-      const innerGrad = ctx.createRadialGradient(
-        rx * 0.15, ry * 0.2, 0,
-        rx * 0.15, ry * 0.2, rx * 0.55
+      ctx.ellipse(-rx * 0.22, -ry * 0.32, rx * 0.28, ry * 0.2, -Math.PI * 0.12, 0, Math.PI * 2)
+      const mainSpec = ctx.createRadialGradient(
+        -rx * 0.22, -ry * 0.32, 0,
+        -rx * 0.22, -ry * 0.32, rx * 0.28
       )
-      innerGrad.addColorStop(0, "rgba(40, 120, 200, 0.1)")
-      innerGrad.addColorStop(1, "rgba(40, 120, 200, 0)")
-      ctx.fillStyle = innerGrad
+      mainSpec.addColorStop(0, "rgba(255, 255, 255, 0.95)")
+      mainSpec.addColorStop(0.4, "rgba(255, 255, 255, 0.4)")
+      mainSpec.addColorStop(0.75, "rgba(220, 235, 255, 0.08)")
+      mainSpec.addColorStop(1, "rgba(200, 220, 255, 0)")
+      ctx.fillStyle = mainSpec
       ctx.fill()
 
-      // Main specular highlight (top-left bright spot)
+      // 3) Ponto de brilho forte (reflexo mais seco)
       ctx.beginPath()
-      ctx.ellipse(-rx * 0.28, -ry * 0.3, rx * 0.32, ry * 0.22, -Math.PI * 0.15, 0, Math.PI * 2)
-      const specGrad = ctx.createRadialGradient(
-        -rx * 0.28, -ry * 0.3, 0,
-        -rx * 0.28, -ry * 0.3, rx * 0.32
+      ctx.ellipse(-rx * 0.18, -ry * 0.38, rx * 0.06, ry * 0.05, -Math.PI * 0.1, 0, Math.PI * 2)
+      ctx.fillStyle = "rgba(255, 255, 255, 0.9)"
+      ctx.fill()
+
+      // 4) Segundo destaque – alongado e suave (abaixo do principal)
+      ctx.beginPath()
+      ctx.ellipse(rx * 0.2, ry * 0.25, rx * 0.35, ry * 0.12, Math.PI * 0.25, 0, Math.PI * 2)
+      const secSpec = ctx.createRadialGradient(
+        rx * 0.2, ry * 0.25, 0,
+        rx * 0.2, ry * 0.25, rx * 0.35
       )
-      specGrad.addColorStop(0, "rgba(255, 255, 255, 0.5)")
-      specGrad.addColorStop(0.5, "rgba(255, 255, 255, 0.2)")
-      specGrad.addColorStop(1, "rgba(255, 255, 255, 0)")
-      ctx.fillStyle = specGrad
+      secSpec.addColorStop(0, "rgba(255, 255, 255, 0.35)")
+      secSpec.addColorStop(0.5, "rgba(240, 248, 255, 0.12)")
+      secSpec.addColorStop(1, "rgba(220, 235, 255, 0)")
+      ctx.fillStyle = secSpec
       ctx.fill()
 
-      // Small sharp highlight dot
+      // 5) Reflexo interno (luz refratada – canto inferior)
       ctx.beginPath()
-      ctx.ellipse(-rx * 0.2, -ry * 0.35, rx * 0.08, ry * 0.06, -Math.PI * 0.1, 0, Math.PI * 2)
-      ctx.fillStyle = "rgba(255, 255, 255, 0.6)"
-      ctx.fill()
-
-      // Secondary highlight (bottom-right, softer)
-      ctx.beginPath()
-      ctx.ellipse(rx * 0.25, ry * 0.3, rx * 0.15, ry * 0.08, Math.PI * 0.3, 0, Math.PI * 2)
-      const secHighlight = ctx.createRadialGradient(
-        rx * 0.25, ry * 0.3, 0,
-        rx * 0.25, ry * 0.3, rx * 0.15
+      ctx.ellipse(rx * 0.18, ry * 0.28, rx * 0.5, ry * 0.4, Math.PI * 0.22, 0, Math.PI * 2)
+      const innerRef = ctx.createRadialGradient(
+        rx * 0.18, ry * 0.28, 0,
+        rx * 0.18, ry * 0.28, rx * 0.5
       )
-      secHighlight.addColorStop(0, "rgba(200, 240, 255, 0.25)")
-      secHighlight.addColorStop(1, "rgba(200, 240, 255, 0)")
-      ctx.fillStyle = secHighlight
+      innerRef.addColorStop(0, "rgba(180, 210, 255, 0.2)")
+      innerRef.addColorStop(0.6, "rgba(100, 140, 200, 0.06)")
+      innerRef.addColorStop(1, "rgba(60, 90, 140, 0)")
+      ctx.fillStyle = innerRef
       ctx.fill()
 
-      // Caustic rim light at the edge
+      // 6) Borda – linha de luz na beirada (caustic/rim)
       ctx.beginPath()
       ctx.ellipse(0, 0, rx, ry, 0, 0, Math.PI * 2)
       const rimGrad = ctx.createRadialGradient(
-        rx * 0.3, ry * 0.3, rx * 0.6,
+        rx * 0.35, ry * 0.35, rx * 0.4,
         0, 0, rx
       )
-      rimGrad.addColorStop(0, "rgba(100, 200, 255, 0)")
-      rimGrad.addColorStop(0.85, "rgba(100, 200, 255, 0)")
-      rimGrad.addColorStop(0.95, "rgba(140, 220, 255, 0.14)")
-      rimGrad.addColorStop(1, "rgba(180, 240, 255, 0.07)")
+      rimGrad.addColorStop(0, "rgba(255, 255, 255, 0)")
+      rimGrad.addColorStop(0.7, "rgba(200, 220, 255, 0)")
+      rimGrad.addColorStop(0.92, "rgba(255, 255, 255, 0.25)")
+      rimGrad.addColorStop(1, "rgba(255, 255, 255, 0.4)")
       ctx.fillStyle = rimGrad
       ctx.fill()
+
+      // 7) Contorno sutil da gota (define a borda)
+      ctx.strokeStyle = "rgba(80, 120, 180, 0.35)"
+      ctx.lineWidth = 1.2
+      ctx.beginPath()
+      ctx.ellipse(0, 0, rx, ry, 0, 0, Math.PI * 2)
+      ctx.stroke()
 
       ctx.restore()
 

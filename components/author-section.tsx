@@ -58,7 +58,7 @@ export function AuthorSection() {
             className="absolute inset-0 opacity-0 transition-opacity duration-500 pointer-events-none"
             style={{
               opacity: isHovering ? 0.08 : 0,
-              background: `radial-gradient(600px circle at ${mousePos.x}% ${mousePos.y}%, oklch(0.70 0.15 195), transparent 60%)`,
+              background: `radial-gradient(600px circle at ${mousePos.x}% ${mousePos.y}%, rgba(255, 255, 255, 0.06), transparent 60%)`,
             }}
             aria-hidden="true"
           />
@@ -140,9 +140,9 @@ Esse sou eu. O convite está feito. Aceite se tiver coragem.
                 {/* Stats */}
                 <div className="flex flex-wrap justify-center sm:justify-start gap-6 sm:gap-8 mt-8 sm:mt-10 pt-6 sm:pt-8 border-t border-border">
                   {[
-                    { value: "1", label: "Livro publicado" },
-                    { value: "5+", label: "Anos escrevendo" },
-                    { value: "10K+", label: "Leitores" },
+                    { value: "500+", label: "Páginas profundas e sensíveis" },
+                    { value: "100+", label: "Artes conceituais" },
+                    { value: "1000+", label: "Dias investidos no projeto" },
                   ].map((stat, i) => (
                     <div key={i} className="text-center">
                       <p className="text-2xl font-bold font-serif text-primary">{stat.value}</p>

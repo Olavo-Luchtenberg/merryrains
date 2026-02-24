@@ -43,7 +43,7 @@ export function SynopsisSection() {
                 <p className="text-base sm:text-lg leading-relaxed text-muted-foreground font-sans">
                   A chuva nao e apenas agua. E uma ponte entre dimensoes, uma mensagem cosmica que levou milenios para chegar ate nos. E agora, alguem esta respondendo.
                 </p>
-                <div className="relative p-4 sm:p-6 rounded-lg border border-border bg-secondary/50">
+                <div className="relative p-4 sm:p-6 rounded-2xl border border-border bg-secondary/50">
                   <div className="absolute -top-3 left-6 px-3 bg-background text-primary text-xs tracking-widest uppercase font-sans">
                     Trecho do Livro
                   </div>

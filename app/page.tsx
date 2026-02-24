@@ -25,11 +25,13 @@ export default function Home() {
       <CursorGlow />
       <WetTrailEffect />
 
+      {/* RainSound sempre montado para poder auto-iniciar no mesmo gesto do clique em Entrar */}
+      <RainSound autoStart={hasChosen && choice === "rain"} visible={hasChosen} />
+
       {!hasChosen ? (
         <WelcomeScreen />
       ) : (
         <>
-          <RainSound autoStart={choice === "rain"} />
           <FloatingNav />
           <main>
             <HeroSection />

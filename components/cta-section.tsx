@@ -33,7 +33,7 @@ export function CtaSection() {
         className="absolute inset-0"
         style={{
           background:
-            "radial-gradient(ellipse at 50% 50%, rgba(80, 180, 220, 0.06), transparent 60%)",
+            "radial-gradient(ellipse at 50% 50%, rgba(255, 255, 255, 0.04), transparent 60%)",
           animation: isVisible ? "pulse 4s ease-in-out infinite" : "none",
         }}
         aria-hidden="true"
@@ -72,7 +72,7 @@ export function CtaSection() {
               className="absolute -inset-6 rounded-2xl blur-3xl opacity-20 -z-10"
               style={{
                 background:
-                  "linear-gradient(135deg, rgba(80, 180, 220, 0.6), rgba(180, 160, 80, 0.3))",
+                  "linear-gradient(135deg, rgba(255, 255, 255, 0.15), rgba(166, 166, 166, 0.08))",
                 animation: isVisible ? "pulse 3s ease-in-out infinite" : "none",
               }}
               aria-hidden="true"

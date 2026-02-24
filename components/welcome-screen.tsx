@@ -40,8 +40,8 @@ export function WelcomeScreen() {
   const handleEnter = () => {
     if (!selected) return
     setChoice(selected)
+    setHasChosen(true, selected)
     setIsEntering(true)
-    setTimeout(() => setHasChosen(true, selected), 800)
   }
 
   return (
@@ -68,9 +68,9 @@ export function WelcomeScreen() {
               key={opt.id}
               type="button"
               onClick={() => setSelected(opt.id)}
-              className={`group flex flex-col items-center gap-3 p-6 rounded-xl border-2 transition-all duration-300 ${
+              className={`group flex flex-col items-center gap-3 p-6 rounded-2xl border-2 transition-all duration-300 ${
                 selected === opt.id
-                  ? "border-primary bg-primary/10 shadow-[0_0_30px_rgba(80,180,220,0.2)]"
+                  ? "border-primary bg-primary/10 shadow-[0_0_30px_rgba(255,255,255,0.15)]"
                   : "border-border bg-card/50 hover:border-primary/40 hover:bg-card/80"
               }`}
             >
@@ -89,7 +89,7 @@ export function WelcomeScreen() {
           disabled={!selected}
           className={`px-10 py-4 text-sm font-semibold tracking-wider uppercase rounded-lg font-sans transition-all duration-300 animate-in fade-in slide-in-from-bottom-4 duration-700 delay-500 ${
             selected
-              ? "bg-primary text-primary-foreground hover:bg-primary/90 hover:shadow-[0_0_25px_rgba(80,180,220,0.3)]"
+              ? "bg-primary text-primary-foreground hover:bg-primary/90 hover:shadow-[0_0_25px_rgba(255,255,255,0.25)]"
               : "bg-muted text-muted-foreground cursor-not-allowed"
           }`}
         >

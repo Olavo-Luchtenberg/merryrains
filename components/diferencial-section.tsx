@@ -164,14 +164,14 @@ function DiferencialCard({
             setExpanded(!expanded)
           }
         }}
-        className="group relative rounded-xl border border-border bg-card p-5 sm:p-6 md:p-8 lg:p-10 transition-all duration-500 hover:border-primary/30"
+        className="group relative rounded-2xl border border-border bg-card p-5 sm:p-6 md:p-8 lg:p-10 transition-all duration-500 hover:border-primary/30"
       >
         {/* Interactive glow */}
         <div
-          className="absolute inset-0 rounded-xl opacity-0 transition-opacity duration-500 pointer-events-none"
+          className="absolute inset-0 rounded-2xl opacity-0 transition-opacity duration-500 pointer-events-none"
           style={{
             opacity: isHovering ? 0.06 : 0,
-            background: `radial-gradient(500px circle at ${mousePos.x}% ${mousePos.y}%, oklch(0.70 0.15 195), transparent 60%)`,
+            background: `radial-gradient(500px circle at ${mousePos.x}% ${mousePos.y}%, rgba(255, 255, 255, 0.05), transparent 60%)`,
           }}
           aria-hidden="true"
         />
@@ -233,7 +233,7 @@ function DiferencialCard({
 
         {/* Bottom accent line */}
         <div
-          className="absolute bottom-0 left-0 h-[2px] bg-primary rounded-b-xl transition-all duration-700"
+          className="absolute bottom-0 left-0 h-[2px] bg-primary rounded-b-2xl transition-all duration-700"
           style={{ width: isHovering ? "100%" : "0%" }}
           aria-hidden="true"
         />

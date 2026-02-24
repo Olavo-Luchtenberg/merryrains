@@ -1,0 +1,36 @@
+﻿[Arrow]
+Path=Drop 1 - normal.ani
+
+[Help]
+Path=Drop 2 - help.ani
+
+[AppStarting]
+Path=Drop 3 - working.ani
+
+[Wait]
+Path=Drop 4 - busy.ani
+
+[No]
+Path=Drop 8 - unavailable.ani
+
+[SizeNS]
+Path=Drop 9 - vertical.ani
+
+[SizeWE]
+Path=Drop 10 - horizontal.ani
+
+[SizeNWSE]
+Path=Drop 11 - diag_1.ani
+
+[SizeNESW]
+Path=Drop 12 - diag_2.ani
+
+[SizeAll]
+Path=Drop 13 - move.ani
+
+[Hand]
+Path=Drop 15 - link blue.ani
+
+[UpArrow]
+Path=Drop - down.ani
+

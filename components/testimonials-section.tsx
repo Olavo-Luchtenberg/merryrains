@@ -31,7 +31,7 @@ export function TestimonialsSection() {
       <div
         className="absolute inset-0 opacity-30"
         style={{
-          background: "radial-gradient(ellipse at 50% 0%, rgba(80, 180, 220, 0.08), transparent 60%)",
+          background: "radial-gradient(ellipse at 50% 0%, rgba(255, 255, 255, 0.05), transparent 60%)",
         }}
         aria-hidden="true"
       />
@@ -51,7 +51,7 @@ export function TestimonialsSection() {
         <div className="grid md:grid-cols-3 gap-4 sm:gap-6 md:gap-8">
           {testimonials.map((testimonial, i) => (
             <ScrollReveal key={i} delay={i * 150} direction="up">
-              <div className="relative p-5 sm:p-6 md:p-8 rounded-xl border border-border bg-card/80 backdrop-blur-sm h-full flex flex-col">
+              <div className="relative p-5 sm:p-6 md:p-8 rounded-2xl border border-border bg-card/80 backdrop-blur-sm h-full flex flex-col">
                 <div className="flex gap-1 mb-6">
                   {Array.from({ length: testimonial.stars }).map((_, j) => (
                     <Star key={j} className="w-4 h-4 fill-accent text-accent" />

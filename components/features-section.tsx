@@ -3,98 +3,6 @@
 import { ScrollReveal } from "./scroll-reveal"
 import { useRef, useState, useEffect } from "react"
 
-const features = [
-  {
-    number: "01",
-    title: "Mundos Interligados",
-    description:
-      "Uma trama que conecta multiplas dimensoes, onde cada escolha ressoa em realidades paralelas. A chuva e o fio condutor entre todos os mundos.",
-  },
-  {
-    number: "02",
-    title: "Personagens Inesqueciveis",
-    description:
-      "Lira, a cientista rebelde. Kael, o guardiao da chuva. Nyx, a entidade que habita entre as gotas. Cada um com segredos que mudarao tudo.",
-  },
-  {
-    number: "03",
-    title: "Ciencia e Magia",
-    description:
-      "Uma fusao unica de ficcao cientifica hard com elementos de fantasia. A tecnologia encontra o sobrenatural em uma narrativa que desafia os limites da imaginacao.",
-  },
-  {
-    number: "04",
-    title: "Misterio Cosmico",
-    description:
-      "Quem enviou as mensagens na chuva? Por que agora? A resposta vai mudar tudo o que voce acredita sobre o universo e o nosso lugar nele.",
-  },
-]
-
-function FeatureCard({
-  feature,
-  index,
-}: {
-  feature: (typeof features)[0]
-  index: number
-}) {
-  const cardRef = useRef<HTMLDivElement>(null)
-  const [mousePos, setMousePos] = useState({ x: 0, y: 0 })
-  const [isHovered, setIsHovered] = useState(false)
-
-  const handleMouseMove = (e: React.MouseEvent) => {
-    if (!cardRef.current) return
-    const rect = cardRef.current.getBoundingClientRect()
-    setMousePos({
-      x: e.clientX - rect.left,
-      y: e.clientY - rect.top,
-    })
-  }
-
-  return (
-    <ScrollReveal delay={index * 150} direction="scale">
-      <div
-        ref={cardRef}
-        className="relative p-5 sm:p-6 md:p-8 rounded-xl border border-border bg-card overflow-hidden group cursor-default h-full"
-        onMouseMove={handleMouseMove}
-        onMouseEnter={() => setIsHovered(true)}
-        onMouseLeave={() => setIsHovered(false)}
-      >
-        {/* Mouse follow glow */}
-        <div
-          className="absolute w-[300px] h-[300px] rounded-full pointer-events-none transition-opacity duration-500"
-          style={{
-            left: mousePos.x - 150,
-            top: mousePos.y - 150,
-            background:
-              "radial-gradient(circle, rgba(80, 180, 220, 0.12) 0%, transparent 70%)",
-            opacity: isHovered ? 1 : 0,
-          }}
-          aria-hidden="true"
-        />
-
-        <div className="relative z-10">
-          <span className="text-5xl font-bold text-primary/20 font-serif">
-            {feature.number}
-          </span>
-          <h3 className="mt-4 text-xl sm:text-2xl font-bold text-foreground font-serif group-hover:text-primary transition-colors duration-300">
-            {feature.title}
-          </h3>
-          <p className="mt-4 leading-relaxed text-muted-foreground font-sans">
-            {feature.description}
-          </p>
-        </div>
-
-        {/* Bottom accent line */}
-        <div
-          className="absolute bottom-0 left-0 h-[2px] bg-primary transition-all duration-500"
-          style={{ width: isHovered ? "100%" : "0%" }}
-          aria-hidden="true"
-        />
-      </div>
-    </ScrollReveal>
-  )
-}
-
 export function FeaturesSection() {
   const sectionRef = useRef<HTMLElement>(null)
   const [scrollProgress, setScrollProgress] = useState(0)
@@ -125,7 +33,7 @@ export function FeaturesSection() {
         </div>
       </div>
 
-      <div className="max-w-6xl mx-auto">
+      <div className="max-w-6xl mx-auto space-y-10 sm:space-y-12">
         <ScrollReveal>
           <p className="text-sm tracking-[0.4em] uppercase text-primary mb-4 font-sans">
             Por que Ler
@@ -138,11 +46,62 @@ export function FeaturesSection() {
           </h2>
         </ScrollReveal>
 
-        <div className="grid sm:grid-cols-2 gap-4 sm:gap-6">
-          {features.map((feature, i) => (
-            <FeatureCard key={feature.number} feature={feature} index={i} />
-          ))}
-        </div>
+        {/* Bloco 1 */}
+        <ScrollReveal delay={150}>
+          <div className="rounded-2xl border border-border bg-card p-6 sm:p-8 md:p-10">
+            <h3 className="text-xl sm:text-2xl md:text-3xl font-bold font-serif text-foreground mb-6">
+              CHEGA DE TIJOLOS DE PAPEL: O LIVRO QUE RESPEITA O SEU CÉREBRO
+            </h3>
+            <div className="space-y-4 text-muted-foreground font-sans leading-relaxed">
+              <p>
+                Esqueça esses PDFs sem vida ou aqueles livros físicos que parecem um bloco de concreto cheio de letras miúdas. Convenhamos: ninguém mais aguenta quinhentas páginas brancas com um amontoado de texto jogado, onde você lê, lê e sente que não saiu do lugar.
+              </p>
+              <p>
+                Yharus decidiu chutar o balde e inovar. Em um mundo de TikTok, vício em telas e TDAH, a leitura não pode ser um sacrifício sem estímulo.
+              </p>
+              <p>
+                Em MERRY RAINS, a imersão é real, mesmo no digital:
+              </p>
+              <p className="font-semibold text-foreground">ESTÍMULO VISUAL CONSTANTE:</p>
+              <p>Chega de páginas idênticas. Aqui, o design joga junto com a história.</p>
+              <p className="font-semibold text-foreground">CORES COM PROPÓSITO:</p>
+              <p>Cada personagem tem sua própria identidade visual. Você sente a presença deles antes mesmo de ler.</p>
+              <p className="font-semibold text-foreground">ADEUS, CONFUSÃO:</p>
+              <p>Esqueça aqueles travessões bregas ou aspas antigas que te fazem voltar três vezes para saber quem está falando. Aqui, o nome do personagem abre a fala. É direto, limpo e cinematográfico.</p>
+              <p>
+                Se os livros tradicionais pararam no tempo, a gente resolveu acelerar. Você não vai apenas ler; você vai ter uma experiência física de imersão que muito &quot;livro de prateleira&quot; não consegue entregar.
+              </p>
+              <p>É leitura para quem vive no agora.</p>
+            </div>
+          </div>
+        </ScrollReveal>
+
+        {/* Bloco 2 */}
+        <ScrollReveal delay={200}>
+          <div className="rounded-2xl border border-border bg-card p-6 sm:p-8 md:p-10">
+            <h3 className="text-xl sm:text-2xl md:text-3xl font-bold font-serif text-foreground mb-6">
+              MERRY RAINS NÃO É UM PRODUTO. É UMA OBSESSÃO.
+            </h3>
+            <div className="space-y-4 text-muted-foreground font-sans leading-relaxed">
+              <p>
+                Yharus não teve pressa. E ele faz questão que você saiba disso.
+              </p>
+              <p>
+                Foram mais de 1.000 dias de puro isolamento, pensamento, escrita e uma diagramação gráfica feita à mão, detalhe por detalhe. Enquanto o mercado editorial cospe livros genéricos a cada seis meses, ele decidiu seguir o caminho difícil.
+              </p>
+              <p>Ele disse não.</p>
+              <p>
+                Disse não para o caminho tradicional das editoras, disse não para a facilidade de ser &quot;só mais um&quot; jogado no mar da Amazon ou do Kindle. Ele não quis ser um PDF genérico que você baixa e esquece. MERRY RAINS foi tratado com exclusividade cirúrgica, como algo que não pertence ao &quot;comum&quot;.
+              </p>
+              <p>
+                Você não vai achar essa experiência em nenhum outro lugar. Nenhuma livraria física, nenhum buscador de promoções.
+              </p>
+              <p>
+                <strong className="text-foreground">MERRY RAINS você só encontra aqui, no merryrains.com. E ponto final.</strong>
+              </p>
+            </div>
+          </div>
+        </ScrollReveal>
       </div>
     </section>
   )

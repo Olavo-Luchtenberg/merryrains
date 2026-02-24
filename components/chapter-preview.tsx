@@ -66,7 +66,7 @@ export function ChapterPreview() {
                 <button
                   key={i}
                   onClick={() => handleChapterClick(i)}
-                  className={`w-full text-left p-4 rounded-lg border transition-all duration-300 font-sans ${
+                  className={`w-full text-left p-4 rounded-xl border transition-all duration-300 font-sans ${
                     i === activeChapter
                       ? "border-primary/40 bg-primary/5"
                       : "border-transparent hover:border-border hover:bg-secondary/50"
@@ -104,12 +104,12 @@ export function ChapterPreview() {
 
           {/* Active chapter content */}
           <ScrollReveal direction="right" delay={300}>
-            <div className="relative p-8 md:p-12 rounded-xl border border-border bg-card min-h-[300px] flex flex-col justify-center overflow-hidden">
+            <div className="relative p-8 md:p-12 rounded-2xl border border-border bg-card min-h-[300px] flex flex-col justify-center overflow-hidden">
               {/* Decorative accent */}
               <div
                 className="absolute top-0 right-0 w-1/3 h-full opacity-5"
                 style={{
-                  background: "linear-gradient(135deg, transparent, rgba(80, 180, 220, 0.5))",
+                  background: "linear-gradient(135deg, transparent, rgba(255, 255, 255, 0.08))",
                 }}
                 aria-hidden="true"
               />

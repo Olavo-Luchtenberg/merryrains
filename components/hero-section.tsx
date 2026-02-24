@@ -61,7 +61,7 @@ export function HeroSection() {
         <div
           className="absolute w-[300px] h-[300px] sm:w-[450px] sm:h-[450px] lg:w-[600px] lg:h-[600px] rounded-full blur-[80px] sm:blur-[100px] lg:blur-[120px] opacity-20"
           style={{
-            background: "radial-gradient(circle, rgba(80, 180, 220, 0.5), transparent)",
+            background: "radial-gradient(circle, rgba(255, 255, 255, 0.08), transparent)",
             left: `${20 + mousePos.x * 10}%`,
             top: `${10 + mousePos.y * 10}%`,
             transition: "left 1.5s ease-out, top 1.5s ease-out",
@@ -70,7 +70,7 @@ export function HeroSection() {
         <div
           className="absolute w-[200px] h-[200px] sm:w-[300px] sm:h-[300px] lg:w-[400px] lg:h-[400px] rounded-full blur-[60px] sm:blur-[80px] lg:blur-[100px] opacity-15"
           style={{
-            background: "radial-gradient(circle, rgba(180, 160, 80, 0.5), transparent)",
+            background: "radial-gradient(circle, rgba(166, 166, 166, 0.06), transparent)",
             right: `${15 + (1 - mousePos.x) * 10}%`,
             bottom: `${20 + (1 - mousePos.y) * 8}%`,
             transition: "right 2s ease-out, bottom 2s ease-out",
@@ -94,7 +94,7 @@ export function HeroSection() {
             style={{
               transform: `perspective(1000px) rotateY(${(mousePos.x - 0.5) * 10}deg) rotateX(${(0.5 - mousePos.y) * 5}deg) translateY(${bookFloat}px)`,
               transition: "transform 0.3s ease-out",
-              boxShadow: "0 25px 60px rgba(0, 0, 0, 0.5), 0 0 40px rgba(80, 180, 220, 0.15)",
+              boxShadow: "0 25px 60px rgba(0, 0, 0, 0.5), 0 0 40px rgba(255, 255, 255, 0.08)",
             }}
           >
             <Image
@@ -117,7 +117,7 @@ export function HeroSection() {
           <div
             className="absolute -inset-4 rounded-xl blur-2xl opacity-20 -z-10"
             style={{
-              background: "linear-gradient(135deg, rgba(80, 180, 220, 0.5), rgba(180, 160, 80, 0.3))",
+              background: "linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(166, 166, 166, 0.06))",
             }}
             aria-hidden="true"
           />
@@ -126,8 +126,9 @@ export function HeroSection() {
         {/* Title & CTA */}
         <div className="flex flex-col items-center lg:items-start text-center lg:text-left gap-6">
           <p
-            className="text-sm tracking-[0.4em] uppercase text-primary font-sans"
+            className="text-sm tracking-[0.4em] uppercase font-sans"
             style={{
+              color: '#ffffff',
               opacity: titleRevealed ? 1 : 0,
               transform: titleRevealed ? "translateY(0)" : "translateY(20px)",
               transition: "all 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.2s",
@@ -154,8 +155,9 @@ export function HeroSection() {
             {"RAINS".split("").map((letter, i) => (
               <span
                 key={`r-${i}`}
-                className="inline-block text-4xl min-[400px]:text-5xl sm:text-6xl md:text-8xl lg:text-9xl font-bold tracking-tight text-primary"
+                className="inline-block text-4xl min-[400px]:text-5xl sm:text-6xl md:text-8xl lg:text-9xl font-bold tracking-tight"
                 style={{
+                  color: '#ffffff',
                   opacity: titleRevealed ? 1 : 0,
                   transform: titleRevealed ? "translateY(0) rotateX(0)" : "translateY(40px) rotateX(40deg)",
                   transition: `all 0.8s cubic-bezier(0.16, 1, 0.3, 1) ${0.7 + i * 0.06}s`,
@@ -190,7 +192,8 @@ export function HeroSection() {
           >
             <a
               href="#comprar"
-              className="group relative inline-flex items-center justify-center gap-2 px-8 py-4 text-sm font-semibold tracking-wider uppercase bg-primary text-primary-foreground rounded-lg overflow-hidden font-sans"
+              className="group relative inline-flex items-center justify-center gap-2 px-8 py-4 text-sm font-semibold tracking-wider uppercase rounded-lg overflow-hidden font-sans"
+              style={{ backgroundColor: '#ffffff', color: '#000000' }}
             >
               <span className="relative z-10">Garanta Seu Exemplar</span>
               <div className="absolute inset-0 bg-accent/80 translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
@@ -215,7 +218,7 @@ export function HeroSection() {
         <span className="text-xs tracking-[0.3em] uppercase text-muted-foreground font-sans">
           Scroll
         </span>
-        <ChevronDown className="w-5 h-5 text-primary animate-bounce" />
+        <ChevronDown className="w-5 h-5 animate-bounce" style={{ color: '#ffffff' }} />
       </div>
     </section>
   )
