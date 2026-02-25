@@ -101,12 +101,12 @@ export function AuthorSection() {
       <div className="max-w-6xl mx-auto">
         <ScrollReveal>
           <p className="text-sm tracking-[0.4em] uppercase text-primary mb-4 font-sans">
-            O Criador
+            A mente pensante por trás de tudo isso
           </p>
         </ScrollReveal>
         <ScrollReveal delay={100}>
           <h2 className="text-2xl sm:text-4xl md:text-5xl font-bold font-serif text-foreground mb-8 sm:mb-12 md:mb-16 text-balance">
-            QUEM É <span className="text-primary">YHARUS</span>
+            QUEM É <span className="text-primary">YHARUS?</span>
           </h2>
         </ScrollReveal>
 

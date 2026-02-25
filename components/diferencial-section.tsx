@@ -89,7 +89,7 @@ const diferenciais = [
         <path d="M20 8V14" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
       </svg>
     ),
-    title: "Plottwist nível ★ ★ ★",
+    title: "Plottwist Nível ** * **",
     description:
       'Sabe aquela mania de ler um livro e já querer adivinhar o final no terceiro capítulo porque você "já viu de tudo"? Pois é, aqui essa sua confiança morre.\n\nNesta categoria, o autor não está tentando ser seu amigo; ele está tentando te fazer de otário. Ele te pega pela mão, te faz acreditar que você é o mestre da dedução, e no último segundo ele puxa o tapete com tanta força que você esquece até como respira.\n\nNão é um suspense comum de "quem matou?". É uma quebra de realidade total.\n\nÉ aquele tipo de livro que, quando você termina e deixa ele de lado, o silêncio da sala fica pesado. Você vai ficar encarando a parede por meia hora, sentindo aquela ponta de raiva por ter sido tão cego, e vai ser obrigado a reabrir na primeira página só pra entender onde foi que você perdeu o fio da meada.\n\nNível Ilha do Medo, Clube da Luta e O Sexto Sentido. Se você não aguenta ter suas certezas destruídas ou detesta se sentir enganado, passe longe. Mas se você busca aquele livro que não sai da sua cabeça nem depois de uma semana... prepare-se para o seu próximo trauma favorito.',
     comparison: "Não é quem matou. É o que você não viu chegando.",

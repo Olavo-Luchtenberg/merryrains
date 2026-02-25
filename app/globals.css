@@ -120,6 +120,19 @@
   }
 }
 
+/* Turn.js - flipbook preview */
+.flipbook {
+  position: relative;
+  min-height: 400px;
+}
+.flipbook .turn-page {
+  background-color: var(--card) !important;
+  color: var(--foreground) !important;
+}
+.flipbook .turn-page.hard {
+  background: linear-gradient(135deg, var(--card) 0%, var(--muted) 100%) !important;
+}
+
 /* Efeito molhado - mancha escurece o texto (como água no papel) e seca */
 @keyframes wet-spot-dry {
   0%, 35% {
