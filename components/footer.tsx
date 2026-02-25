@@ -2,6 +2,7 @@
 
 import { ScrollReveal } from "./scroll-reveal"
 import { useSoundtrack } from "@/lib/soundtrack-context"
+import { Instagram } from "lucide-react"
 
 export function Footer() {
   const { setHasChosen } = useSoundtrack()
@@ -29,16 +30,31 @@ export function Footer() {
                 Página inicial
               </button>
               <a
-                href="#sinopse"
+                href="#previa"
                 className="text-sm text-muted-foreground hover:text-primary transition-colors font-sans"
               >
-                Historia
+                Previa
               </a>
               <a
                 href="#comprar"
                 className="text-sm text-muted-foreground hover:text-primary transition-colors font-sans"
               >
                 Comprar
+              </a>
+              <a
+                href="https://www.instagram.com/umbrellamerryrains/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors font-sans group"
+                aria-label="Instagram do livro Merry Rains"
+              >
+                <span
+                  className="flex items-center justify-center w-9 h-9 rounded-full overflow-hidden border-2 border-border bg-gradient-to-br from-[#f09433] via-[#e1306c] to-[#405de6] p-1.5 text-white group-hover:scale-110 transition-transform duration-200"
+                  aria-hidden
+                >
+                  <Instagram className="w-4 h-4" strokeWidth={2} />
+                </span>
+                <span className="hidden sm:inline">Instagram</span>
               </a>
             </div>
           </div>

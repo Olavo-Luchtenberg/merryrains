@@ -199,7 +199,7 @@ export function HeroSection() {
               <div className="absolute inset-0 bg-accent/80 translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
             </a>
             <a
-              href="#sinopse"
+              href="#previa"
               className="inline-flex items-center justify-center gap-2 px-8 py-4 text-sm font-semibold tracking-wider uppercase border border-border text-foreground rounded-lg hover:bg-secondary transition-colors font-sans"
             >
               ENTRAR NA HISTÓRIA

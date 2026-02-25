@@ -13,7 +13,7 @@ import {
 import { Button } from "@/components/ui/button"
 
 const links = [
-  { href: "#sinopse", label: "Historia" },
+  { href: "#previa", label: "Previa" },
   { href: "#diferencial", label: "Diferencial" },
   { href: "#autor", label: "Autor" },
   { href: "#comprar", label: "Comprar" },
@@ -34,7 +34,7 @@ export function FloatingNav() {
     const handleScroll = () => {
       setVisible(window.scrollY > 500)
 
-      const sections = ["sinopse", "diferencial", "autor", "comprar"]
+      const sections = ["previa", "diferencial", "autor", "comprar"]
       for (const section of sections.reverse()) {
         const el = document.getElementById(section)
         if (el) {

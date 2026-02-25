@@ -3,6 +3,68 @@
 import { ScrollReveal } from "./scroll-reveal"
 import { useRef, useState, useEffect } from "react"
 import Image from "next/image"
+import { Instagram } from "lucide-react"
+
+const stats = [
+  { target: 500, label: "Páginas profundas e sensíveis" },
+  { target: 100, label: "Artes conceituais" },
+  { target: 1000, label: "Dias investidos no projeto" },
+]
+
+const COUNT_UP_DURATION = 2000
+const HOLD_DURATION = 3500
+
+function useCountUp(target: number) {
+  const [count, setCount] = useState(0)
+
+  useEffect(() => {
+    let rafId: number
+    let holdTimeout: ReturnType<typeof setTimeout>
+
+    const runCycle = () => {
+      let startTime: number | null = null
+
+      const animate = (timestamp: number) => {
+        if (startTime === null) startTime = timestamp
+        const elapsed = timestamp - startTime
+        const progress = Math.min(elapsed / COUNT_UP_DURATION, 1)
+        const easeOut = 1 - Math.pow(1 - progress, 3)
+        setCount(Math.floor(easeOut * target))
+
+        if (progress < 1) {
+          rafId = requestAnimationFrame(animate)
+        } else {
+          holdTimeout = setTimeout(() => {
+            setCount(0)
+            runCycle()
+          }, HOLD_DURATION)
+        }
+      }
+
+      rafId = requestAnimationFrame(animate)
+    }
+
+    runCycle()
+    return () => {
+      cancelAnimationFrame(rafId)
+      clearTimeout(holdTimeout)
+    }
+  }, [target])
+
+  return count
+}
+
+function StatItem({ target, label }: { target: number; label: string }) {
+  const count = useCountUp(target)
+  return (
+    <div className="text-center">
+      <p className="text-2xl font-bold font-serif text-primary">
+        Mais De {count.toLocaleString("pt-BR")}
+      </p>
+      <p className="text-xs text-muted-foreground mt-1 font-sans">{label}</p>
+    </div>
+  )
+}
 
 export function AuthorSection() {
   const cardRef = useRef<HTMLDivElement>(null)
@@ -19,10 +81,12 @@ export function AuthorSection() {
   }
 
   const [lineIndex, setLineIndex] = useState(0)
-  const quotes = [
-    "Escrever e deixar a chuva falar por voce.",
-    "Cada gota carrega um universo de possibilidades.",
-    "A fantasia e a ciencia se encontram onde a imaginacao nao tem limites.",
+  const quotes: { text: string; author?: string }[] = [
+    { text: "Ou você trabalha pelos seus próprios sonhos, ou alguém vai te contratar para trabalhar pelos sonhos dele." },
+    { text: "Insanidade é continuar fazendo sempre a mesma coisa e esperar resultados diferentes.", author: "Albert Einstein" },
+    { text: "Se você quer ter o que os outros não têm, precisa fazer o que os outros não fazem.", author: "Zig Ziglar" },
+    { text: "Fazendo ou não Fazendo, O Tempo Continua Passando." },
+    { text: "Só aceite críticas de alguém com quem você trocaria de lugar.", author: "Brené Brown" },
   ]
 
   useEffect(() => {
@@ -42,7 +106,7 @@ export function AuthorSection() {
         </ScrollReveal>
         <ScrollReveal delay={100}>
           <h2 className="text-2xl sm:text-4xl md:text-5xl font-bold font-serif text-foreground mb-8 sm:mb-12 md:mb-16 text-balance">
-            Sobre o <span className="text-primary">Autor</span>
+            QUEM É <span className="text-primary">YHARUS</span>
           </h2>
         </ScrollReveal>
 
@@ -68,7 +132,7 @@ export function AuthorSection() {
             <ScrollReveal direction="left" delay={200}>
               <div className="relative aspect-[3/4] md:aspect-auto md:h-full overflow-hidden">
                 <Image
-                  src="/images/author.jpg"
+                  src="/WhatsApp Image 2026-02-24 at 22.30.25.jpeg"
                   alt="Foto do autor de Merry Rains"
                   fill
                   className="object-cover"
@@ -99,7 +163,7 @@ export function AuthorSection() {
                   YHARUS
                 </h3>
                 <p className="text-sm text-primary font-semibold tracking-wider uppercase mb-6 font-sans">
-                  Escritor & Visionario
+                  Escritor & Visionário
                 </p>
 
                 <div className="space-y-4 mb-8">
@@ -122,34 +186,53 @@ Esse sou eu. O convite está feito. Aceite se tiver coragem.
                 </div>
 
                 {/* Rotating quote */}
-                <div className="relative border-l-2 border-primary/30 pl-6 py-2 min-h-[60px]">
-                  {quotes.map((quote, i) => (
-                    <p
+                <div className="relative border-l-2 border-primary/30 pl-6 py-2 min-h-[80px]">
+                  {quotes.map((q, i) => (
+                    <div
                       key={i}
-                      className="text-foreground/80 italic font-serif text-lg absolute inset-0 pl-6 py-2 flex items-center transition-all duration-700"
+                      className="absolute inset-0 pl-6 py-2 flex flex-col justify-center transition-all duration-700"
                       style={{
                         opacity: i === lineIndex ? 1 : 0,
                         transform: `translateY(${i === lineIndex ? 0 : 10}px)`,
                       }}
                     >
-                      {`"${quote}"`}
-                    </p>
+                      <p className="text-foreground/80 italic font-serif text-lg">
+                        {`"${q.text}"`}
+                      </p>
+                      {q.author && (
+                        <p className="text-sm text-muted-foreground mt-1 font-sans">
+                          — {q.author}
+                        </p>
+                      )}
+                    </div>
                   ))}
                 </div>
 
                 {/* Stats */}
                 <div className="flex flex-wrap justify-center sm:justify-start gap-6 sm:gap-8 mt-8 sm:mt-10 pt-6 sm:pt-8 border-t border-border">
-                  {[
-                    { value: "500+", label: "Páginas profundas e sensíveis" },
-                    { value: "100+", label: "Artes conceituais" },
-                    { value: "1000+", label: "Dias investidos no projeto" },
-                  ].map((stat, i) => (
-                    <div key={i} className="text-center">
-                      <p className="text-2xl font-bold font-serif text-primary">{stat.value}</p>
-                      <p className="text-xs text-muted-foreground mt-1 font-sans">{stat.label}</p>
-                    </div>
+                  {stats.map((stat, i) => (
+                    <StatItem key={i} target={stat.target} label={stat.label} />
                   ))}
                 </div>
+
+                {/* Instagram link */}
+                <a
+                  href="https://www.instagram.com/umbrellamerryrains/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-3 mt-8 p-3 rounded-full border border-border bg-card/50 hover:bg-card transition-colors group"
+                  aria-label="Siga o Merry Rains no Instagram"
+                >
+                  <span
+                    className="flex items-center justify-center w-12 h-12 rounded-full overflow-hidden shrink-0 border-2 border-border bg-gradient-to-br from-[#f09433] via-[#e1306c] to-[#405de6] p-2.5 text-white group-hover:scale-105 transition-transform duration-200"
+                    aria-hidden
+                  >
+                    <Instagram className="w-6 h-6" strokeWidth={2} />
+                  </span>
+                  <span className="text-sm font-sans text-muted-foreground group-hover:text-foreground transition-colors">
+                    Siga Merry Rains no Instagram
+                  </span>
+                </a>
               </div>
             </ScrollReveal>
           </div>
