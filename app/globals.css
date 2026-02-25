@@ -120,19 +120,24 @@
   }
 }
 
-/* Turn.js - flipbook preview */
-.flipbook {
+/* Esconde scrollbar mas mantém scroll */
+.scrollbar-hide {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+/* React-pageflip - flipbook preview */
+.flipbook-container {
   position: relative;
   min-height: 400px;
 }
-.flipbook .turn-page {
+.flipbook-container .book-page-wrapper {
   background-color: var(--card) !important;
   color: var(--foreground) !important;
 }
-.flipbook .turn-page.hard {
-  background: linear-gradient(135deg, var(--card) 0%, var(--muted) 100%) !important;
-}
-
 /* Efeito molhado - mancha escurece o texto (como água no papel) e seca */
 @keyframes wet-spot-dry {
   0%, 35% {

@@ -1,7 +1,16 @@
 "use client"
 
+import dynamic from "next/dynamic"
 import { ScrollReveal } from "./scroll-reveal"
-import { BookPreview } from "./book-preview"
+
+const BookPreview = dynamic(() => import("./book-preview").then((m) => m.BookPreview), {
+  ssr: false,
+  loading: () => (
+    <div className="w-full max-w-[400px] aspect-[400/560] mx-auto bg-card border border-border rounded-lg flex items-center justify-center">
+      <p className="text-muted-foreground text-sm">Carregando preview...</p>
+    </div>
+  ),
+})
 
 export function SynopsisSection() {
   return (

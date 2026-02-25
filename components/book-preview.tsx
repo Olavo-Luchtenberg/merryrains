@@ -1,6 +1,7 @@
 "use client"
 
-import { useRef, useEffect, useState } from "react"
+import React, { useRef, useState, useEffect } from "react"
+import HTMLFlipBook from "react-pageflip"
 
 const PREVIEW_PAGES = [
   { content: "MERRY RAINS", isCover: true },
@@ -30,7 +31,8 @@ const PREVIEW_PAGES = [
 ]
 
 export function BookPreview() {
-  const flipbookRef = useRef<HTMLDivElement>(null)
+  const bookRef = useRef<HTMLFlipBook>(null)
+  const [dimensions, setDimensions] = useState({ width: 400, height: 560 })
   const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
@@ -38,49 +40,16 @@ export function BookPreview() {
   }, [])
 
   useEffect(() => {
-    if (!mounted || typeof window === "undefined" || !flipbookRef.current) return
-
-    const el = flipbookRef.current
-    let cancelled = false
-    let doCleanup: (() => void) | undefined
-
-    void Promise.all([import("jquery"), import("turn.js")]).then(([jquery]) => {
-      if (cancelled || !flipbookRef.current) return
-
-      const $ = jquery.default
-      ;($ as (el: HTMLElement) => { turn: (opts: object) => void })(el).turn({
+    if (!mounted) return
+    const updateSize = () => {
+      setDimensions({
         width: Math.min(400, window.innerWidth - 48),
         height: Math.min(560, window.innerHeight - 120),
-        autoCenter: true,
-        duration: 600,
-        gradients: true,
-        display: "single",
       })
-
-      const handleResize = () => {
-        try {
-          ;($ as (el: HTMLElement) => { turn: (cmd: string) => void })(el).turn("resize")
-        } catch {
-          // ignore
-        }
-      }
-
-      window.addEventListener("resize", handleResize)
-
-      doCleanup = () => {
-        window.removeEventListener("resize", handleResize)
-        try {
-          ;($ as (el: HTMLElement) => { turn: (cmd: string) => void })(el).turn("destroy")
-        } catch {
-          // ignore
-        }
-      }
-    })
-
-    return () => {
-      cancelled = true
-      doCleanup?.()
     }
+    updateSize()
+    window.addEventListener("resize", updateSize)
+    return () => window.removeEventListener("resize", updateSize)
   }, [mounted])
 
   if (!mounted) {
@@ -92,42 +61,62 @@ export function BookPreview() {
   }
 
   return (
-    <div className="w-full flex justify-center overflow-x-auto py-8">
-      <div
-        ref={flipbookRef}
-        id="merry-rains-flipbook"
-        className="flipbook turnjs-container shadow-2xl"
-      >
-        {PREVIEW_PAGES.map((page, i) => (
-          <div
-            key={i}
-            className={`turn-page ${page.isCover ? "hard" : ""} bg-card`}
-          >
-            <div className="flex flex-col justify-center items-center p-6 sm:p-8 h-full text-center">
-              {page.isCover ? (
-                page.content ? (
-                  <div>
-                    <h2 className="text-2xl sm:text-4xl font-bold font-serif text-foreground tracking-tight">
-                      MERRY
-                    </h2>
-                    <h2 className="text-2xl sm:text-4xl font-bold font-serif text-primary tracking-tight mt-1">
-                      RAINS
-                    </h2>
-                    <p className="text-xs text-muted-foreground mt-4 font-sans">
-                      Preview do Livro
-                    </p>
-                  </div>
+    <div className="w-full flex justify-center overflow-x-auto py-8 px-4 scrollbar-hide">
+      <div className="flipbook-container shadow-2xl [&_.stf__wrapper]:!bg-transparent [&_.stf__block]:!bg-transparent">
+        <HTMLFlipBook
+          ref={bookRef}
+          width={dimensions.width}
+          height={dimensions.height}
+          size="fixed"
+          minWidth={0}
+          maxWidth={0}
+          minHeight={0}
+          maxHeight={0}
+          showCover
+          mobileScrollSupport={false}
+          flippingTime={600}
+          usePortrait
+          startZIndex={0}
+          autoSize
+          maxShadowOpacity={0.5}
+          drawShadow
+          className="flipbook"
+        >
+          {PREVIEW_PAGES.map((page, i) => (
+            <div
+              key={i}
+              className="book-page-wrapper bg-card w-full h-full"
+              style={{
+                backgroundColor: "var(--card)",
+                color: "var(--foreground)",
+              }}
+            >
+              <div className="flex flex-col justify-center items-center p-6 sm:p-8 h-full text-center">
+                {page.isCover ? (
+                  page.content ? (
+                    <div>
+                      <h2 className="text-2xl sm:text-4xl font-bold font-serif text-foreground tracking-tight">
+                        MERRY
+                      </h2>
+                      <h2 className="text-2xl sm:text-4xl font-bold font-serif text-primary tracking-tight mt-1">
+                        RAINS
+                      </h2>
+                      <p className="text-xs text-muted-foreground mt-4 font-sans">
+                        Preview do Livro
+                      </p>
+                    </div>
+                  ) : (
+                    <div className="w-full h-full bg-card" />
+                  )
                 ) : (
-                  <div className="w-full h-full bg-card" />
-                )
-              ) : (
-                <p className="text-sm sm:text-base text-muted-foreground font-sans leading-relaxed text-left">
-                  {page.content}
-                </p>
-              )}
+                  <p className="text-sm sm:text-base text-muted-foreground font-sans leading-relaxed text-left w-full">
+                    {page.content}
+                  </p>
+                )}
+              </div>
             </div>
-          </div>
-        ))}
+          ))}
+        </HTMLFlipBook>
       </div>
     </div>
   )
