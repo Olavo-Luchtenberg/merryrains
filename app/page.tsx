@@ -2,7 +2,6 @@
 
 import { RainEffect } from "@/components/rain-effect"
 import { CursorGlow } from "@/components/cursor-glow"
-import { WetTrailEffect } from "@/components/wet-trail-effect"
 import { RainSound } from "@/components/rain-sound"
 import { WelcomeScreen } from "@/components/welcome-screen"
 import { FloatingNav } from "@/components/floating-nav"
@@ -23,7 +22,6 @@ export default function Home() {
     <>
       <RainEffect />
       <CursorGlow />
-      <WetTrailEffect />
 
       {/* RainSound sempre montado para poder auto-iniciar no mesmo gesto do clique em Entrar */}
       <RainSound autoStart={hasChosen && choice === "rain"} visible={hasChosen} />
