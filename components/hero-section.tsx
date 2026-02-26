@@ -1,15 +1,14 @@
 "use client"
 
 import { useEffect, useState, useRef } from "react"
-import Image from "next/image"
 import { ChevronDown } from "lucide-react"
 
 export function HeroSection() {
   const [scrollY, setScrollY] = useState(0)
+  const [viewportHeight, setViewportHeight] = useState(800)
   const [mousePos, setMousePos] = useState({ x: 0.5, y: 0.5 })
   const heroRef = useRef<HTMLElement>(null)
   const [titleRevealed, setTitleRevealed] = useState(false)
-  const [bookFloat, setBookFloat] = useState(0)
 
   useEffect(() => {
     const timer = setTimeout(() => setTitleRevealed(true), 300)
@@ -17,13 +16,10 @@ export function HeroSection() {
   }, [])
 
   useEffect(() => {
-    let animId: number
-    const animate = () => {
-      setBookFloat(Math.sin(Date.now() / 2000) * 5)
-      animId = requestAnimationFrame(animate)
-    }
-    animId = requestAnimationFrame(animate)
-    return () => cancelAnimationFrame(animId)
+    const updateHeight = () => setViewportHeight(window.innerHeight)
+    updateHeight()
+    window.addEventListener("resize", updateHeight)
+    return () => window.removeEventListener("resize", updateHeight)
   }, [])
 
   useEffect(() => {
@@ -43,9 +39,10 @@ export function HeroSection() {
     }
   }, [])
 
-  const parallaxBg = scrollY * 0.4
-  const titleOpacity = Math.max(0, 1 - scrollY / 600)
-  const titleScale = Math.max(0.8, 1 - scrollY / 3000)
+  const heroScrollY = Math.max(0, scrollY - viewportHeight)
+  const parallaxBg = heroScrollY * 0.4
+  const titleOpacity = Math.max(0, 1 - heroScrollY / 600)
+  const titleScale = Math.max(0.8, 1 - heroScrollY / 3000)
 
   return (
     <section
@@ -80,51 +77,15 @@ export function HeroSection() {
 
       {/* Content */}
       <div
-        className="relative z-10 flex flex-col items-center gap-6 sm:gap-8 px-4 pt-20 sm:pt-24 pb-8 lg:flex-row lg:gap-16 lg:pt-0 lg:pb-0 max-w-6xl mx-auto"
+        className="relative z-10 flex flex-col items-center justify-center gap-6 sm:gap-8 px-4 pt-20 sm:pt-24 pb-8 max-w-2xl mx-auto text-center"
         style={{
           opacity: titleOpacity,
           transform: `scale(${titleScale})`,
           transition: "transform 0.1s linear",
         }}
       >
-        {/* Book Cover with 3D tilt */}
-        <div className="relative group">
-          <div
-            className="relative w-[200px] h-[300px] min-[400px]:w-[240px] min-[400px]:h-[360px] sm:w-[260px] sm:h-[390px] md:w-[320px] md:h-[480px] rounded-lg overflow-hidden shadow-2xl"
-            style={{
-              transform: `perspective(1000px) rotateY(${(mousePos.x - 0.5) * 10}deg) rotateX(${(0.5 - mousePos.y) * 5}deg) translateY(${bookFloat}px)`,
-              transition: "transform 0.3s ease-out",
-              boxShadow: "0 25px 60px rgba(0, 0, 0, 0.5), 0 0 40px rgba(255, 255, 255, 0.08)",
-            }}
-          >
-            <Image
-              src="/images/book-cover.jpg"
-              alt="Capa do livro MERRY RAINS"
-              fill
-              className="object-cover"
-              priority
-            />
-            {/* Shine effect */}
-            <div
-              className="absolute inset-0"
-              style={{
-                background: `linear-gradient(${105 + mousePos.x * 50}deg, transparent 30%, rgba(255,255,255,0.08) 50%, transparent 70%)`,
-              }}
-              aria-hidden="true"
-            />
-          </div>
-          {/* Book glow */}
-          <div
-            className="absolute -inset-4 rounded-xl blur-2xl opacity-20 -z-10"
-            style={{
-              background: "linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(166, 166, 166, 0.06))",
-            }}
-            aria-hidden="true"
-          />
-        </div>
-
         {/* Title & CTA */}
-        <div className="flex flex-col items-center lg:items-start text-center lg:text-left gap-6">
+        <div className="flex flex-col items-center text-center gap-6">
           <p
             className="text-sm tracking-[0.4em] uppercase font-sans"
             style={{
@@ -141,8 +102,10 @@ export function HeroSection() {
             {"MERRY".split("").map((letter, i) => (
               <span
                 key={`m-${i}`}
-                className="inline-block text-4xl min-[400px]:text-5xl sm:text-6xl md:text-8xl lg:text-9xl font-bold tracking-tight text-foreground"
+                className="inline-block text-4xl min-[400px]:text-5xl sm:text-6xl md:text-8xl lg:text-9xl font-bold tracking-tight"
                 style={{
+                  color: "#ffffff",
+                  textShadow: "2px 2px 0 #a6a6a6",
                   opacity: titleRevealed ? 1 : 0,
                   transform: titleRevealed ? "translateY(0) rotateX(0)" : "translateY(40px) rotateX(40deg)",
                   transition: `all 0.8s cubic-bezier(0.16, 1, 0.3, 1) ${0.4 + i * 0.06}s`,
@@ -157,7 +120,8 @@ export function HeroSection() {
                 key={`r-${i}`}
                 className="inline-block text-4xl min-[400px]:text-5xl sm:text-6xl md:text-8xl lg:text-9xl font-bold tracking-tight"
                 style={{
-                  color: '#ffffff',
+                  color: "#ffffff",
+                  textShadow: "2px 2px 0 #a6a6a6",
                   opacity: titleRevealed ? 1 : 0,
                   transform: titleRevealed ? "translateY(0) rotateX(0)" : "translateY(40px) rotateX(40deg)",
                   transition: `all 0.8s cubic-bezier(0.16, 1, 0.3, 1) ${0.7 + i * 0.06}s`,
@@ -169,7 +133,7 @@ export function HeroSection() {
           </h1>
 
           <div
-            className="max-w-md text-lg leading-relaxed text-muted-foreground font-sans space-y-6"
+            className="max-w-md text-lg leading-relaxed text-muted-foreground font-sans space-y-6 mx-auto"
             style={{
               opacity: titleRevealed ? 1 : 0,
               transform: titleRevealed ? "translateY(0)" : "translateY(20px)",
@@ -183,7 +147,7 @@ export function HeroSection() {
           </div>
 
           <div
-            className="flex flex-col sm:flex-row gap-4"
+            className="flex flex-col sm:flex-row gap-4 justify-center"
             style={{
               opacity: titleRevealed ? 1 : 0,
               transform: titleRevealed ? "translateY(0)" : "translateY(20px)",
@@ -195,7 +159,7 @@ export function HeroSection() {
               className="group relative inline-flex items-center justify-center gap-2 px-8 py-4 text-sm font-semibold tracking-wider uppercase rounded-lg overflow-hidden font-sans"
               style={{ backgroundColor: '#ffffff', color: '#000000' }}
             >
-              <span className="relative z-10">Garanta Seu Exemplar</span>
+              <span className="relative z-10">Garanta Sua Experiência</span>
               <div className="absolute inset-0 bg-accent/80 translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
             </a>
             <a
@@ -212,7 +176,7 @@ export function HeroSection() {
       <div
         className="absolute bottom-6 sm:bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
         style={{
-          opacity: Math.max(0, 1 - scrollY / 200),
+          opacity: Math.max(0, 1 - heroScrollY / 200),
         }}
       >
         <span className="text-xs tracking-[0.3em] uppercase text-muted-foreground font-sans">

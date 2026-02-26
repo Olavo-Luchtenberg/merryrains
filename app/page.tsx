@@ -5,6 +5,8 @@ import { CursorGlow } from "@/components/cursor-glow"
 import { RainSound } from "@/components/rain-sound"
 import { WelcomeScreen } from "@/components/welcome-screen"
 import { FloatingNav } from "@/components/floating-nav"
+import { MusicVinyl } from "@/components/music-vinyl"
+import { SplashImage } from "@/components/splash-image"
 import { HeroSection } from "@/components/hero-section"
 import { SynopsisSection } from "@/components/synopsis-section"
 import { DiferencialSection } from "@/components/diferencial-section"
@@ -30,8 +32,10 @@ export default function Home() {
         <WelcomeScreen />
       ) : (
         <>
+          <MusicVinyl />
           <FloatingNav />
           <main>
+            <SplashImage />
             <HeroSection />
             <SynopsisSection />
             <DiferencialSection />

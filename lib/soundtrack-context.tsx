@@ -2,7 +2,7 @@
 
 import { createContext, useContext, useState, useEffect, useCallback, type ReactNode } from "react"
 
-export type SoundtrackChoice = "rain" | "silence" | null
+export type SoundtrackChoice = "rain" | "silence" | "music" | null
 
 const STORAGE_KEY = "merry-rains-welcome"
 

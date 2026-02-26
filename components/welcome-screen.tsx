@@ -9,7 +9,7 @@ const options: { id: Exclude<SoundtrackChoice, null>; label: string; icon: React
     label: "Chuva",
     description: "Som ambiente de chuva caindo",
     icon: (
-      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
         <path d="M4 14.5C4 14.5 5 18 5.5 20" />
         <path d="M9 12.5C9 12.5 10 16 10.5 18" />
         <path d="M14 14.5C14 14.5 15 18 15.5 20" />
@@ -19,11 +19,23 @@ const options: { id: Exclude<SoundtrackChoice, null>; label: string; icon: React
     ),
   },
   {
+    id: "music",
+    label: "Música",
+    description: "Trilha musical (em breve)",
+    icon: (
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M9 18V5l12-2v13" />
+        <circle cx="6" cy="18" r="3" />
+        <circle cx="18" cy="16" r="3" />
+      </svg>
+    ),
+  },
+  {
     id: "silence",
     label: "Silêncio",
     description: "Sem trilha sonora",
     icon: (
-      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
         <path d="M11 5 6 9H2v6h4l5 4V5Z" />
         <line x1="22" y1="9" x2="16" y2="15" />
         <line x1="16" y1="9" x2="22" y2="15" />
@@ -62,23 +74,23 @@ export function WelcomeScreen() {
           Para que a experiência seja mais imersiva, comece escolhendo a sua trilha sonora
         </p>
 
-        <div className="grid grid-cols-2 gap-4 mb-12 animate-in fade-in slide-in-from-bottom-4 duration-700 delay-300">
+        <div className="flex flex-wrap justify-center gap-3 mb-12 animate-in fade-in slide-in-from-bottom-4 duration-700 delay-300">
           {options.map((opt) => (
             <button
               key={opt.id}
               type="button"
               onClick={() => setSelected(opt.id)}
-              className={`group flex flex-col items-center gap-3 p-6 rounded-2xl border-2 transition-all duration-300 ${
+              className={`group flex flex-col items-center gap-2 py-4 px-3 rounded-xl border transition-all duration-300 ${
                 selected === opt.id
-                  ? "border-primary bg-primary/10 shadow-[0_0_30px_rgba(255,255,255,0.15)]"
+                  ? "border-primary bg-primary/10 shadow-[0_0_20px_rgba(255,255,255,0.1)]"
                   : "border-border bg-card/50 hover:border-primary/40 hover:bg-card/80"
               }`}
             >
               <span className={selected === opt.id ? "text-primary" : "text-muted-foreground group-hover:text-primary/80"}>
                 {opt.icon}
               </span>
-              <span className="font-semibold text-foreground font-sans">{opt.label}</span>
-              <span className="text-xs text-muted-foreground">{opt.description}</span>
+              <span className="text-sm font-semibold text-foreground font-sans">{opt.label}</span>
+              <span className="text-[10px] leading-tight text-muted-foreground">{opt.description}</span>
             </button>
           ))}
         </div>

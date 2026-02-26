@@ -42,19 +42,22 @@ export function CtaSection() {
       <div className="max-w-4xl mx-auto relative text-center">
         <ScrollReveal>
           <p className="text-sm tracking-[0.4em] uppercase text-primary mb-4 font-sans">
-            Nao Espere Mais
+            Não Espere Mais
           </p>
         </ScrollReveal>
 
         <ScrollReveal delay={100}>
-          <h2 className="text-2xl sm:text-4xl md:text-6xl font-bold font-serif text-foreground mb-4 sm:mb-6 text-balance">
-          Algumas pessoas sentem a chuva, <span className="text-primary">outras apenas se molham</span>
+          <h2 className="text-2xl sm:text-4xl md:text-6xl font-bold font-serif text-foreground mb-4 sm:mb-6">
+            <span className="block whitespace-nowrap">Algumas pessoas <span className="font-bold" style={{ color: "#a6a6a6" }}>sentem</span> a chuva,</span>
+            <span className="block text-primary">outras apenas se <span className="font-bold" style={{ color: "#a6a6a6" }}>molham</span></span>
           </h2>
         </ScrollReveal>
 
         <ScrollReveal delay={200}>
           <p className="text-base sm:text-lg text-muted-foreground mb-8 sm:mb-12 max-w-2xl mx-auto leading-relaxed font-sans">
-          MERRY RAINS não é para quem quer se molhar. É para quem aguenta o impacto de sentir a tempestade inteira. O seu lugar está garantido, ou você vai continuar no raso?.
+            <span className="font-bold" style={{ color: "#a6a6a6" }}>MERRY RAINS</span> não é para quem quer se molhar.<br />
+            É para quem aguenta o impacto de sentir a tempestade inteira.<br />
+            O seu lugar está garantido, ou você vai continuar no raso?
           </p>
         </ScrollReveal>
 

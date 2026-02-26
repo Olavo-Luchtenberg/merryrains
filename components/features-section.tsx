@@ -41,8 +41,8 @@ export function FeaturesSection() {
         </ScrollReveal>
         <ScrollReveal delay={100}>
           <h2 className="text-2xl sm:text-4xl md:text-5xl font-bold font-serif text-foreground mb-8 sm:mb-12 md:mb-16 text-balance">
-            Uma experiencia que vai{" "}
-            <span className="text-primary">alem das paginas</span>
+            Uma experiência que vai{" "}
+            <span className="text-primary">além das páginas</span>
           </h2>
         </ScrollReveal>
 

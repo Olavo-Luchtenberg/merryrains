@@ -19,7 +19,7 @@ const diferenciais = [
     title: "A nova era do suspense: menos peças, mais jogo",
     description:
       'Esqueça as tramas inchadas com mil personagens e cenários que você nem lembra o nome. MERRY RAINS veio para quebrar o mercado com uma proposta que você nunca viu antes.\n\nAqui, cada elemento foi colocado com precisão cirúrgica. Temos poucos personagens e poucos lugares, mas todos estrategicamente posicionados para te encurralar. Nada é figurante: um objeto sobre a mesa, uma cor na parede ou uma única linha de diálogo são peças de um quebra-cabeça de manipulação pura.\n\nÉ um texto refinado, denso e visualmente explosivo, nunca um livro usou as cores com tanta intenção.\n\nNão estamos entregando uma leitura passiva; estamos entregando um ambiente de pressão psicológica constante. Cada detalhe foi escolhido a dedo para que, quando a armadilha fechar, você perceba que a pista estava na sua cara o tempo todo.\n\nMinimalista na forma, brutal no impacto.',
-    comparison: "Enquanto outros escolhem um lado, nos abraamos os dois.",
+    comparison: "Cada frase lida é uma facada na mente do leitor.",
   },
   {
     icon: (
@@ -34,7 +34,7 @@ const diferenciais = [
     title: "Wordbuilding: Aqui a ciência não é enfeite",
     description:
       'Em MERRY RAINS, esqueça aquela fantasia onde as coisas acontecem "porque sim" ou por pura conveniência do roteiro. Aqui, o buraco é mais embaixo.\n\nCada engrenagem, cada fenômeno e cada detalhe desse universo foi levantado do zero em cima de teorias científicas reais. A gente não criou só um cenário; a gente construiu um sistema com uma lógica interna tão amarrada que chega a ser fascinante. Se algo acontece, existe um "porquê" físico, químico ou biológico por trás.\n\nÉ o tipo de worldbuilding feito para quem gosta de entender as regras do jogo e se perder nos detalhes. Se você é do time que ama quando a ficção faz sentido de verdade e respeita a sua inteligência... parabéns, você acabou de encontrar o seu lugar.',
-    comparison: "Nao e magia sem explicacao. E ciencia que parece magica.",
+    comparison: "Antes de pensar em escrever sequer uma palavra Yharus prezou pela coesão e lógica da obra.",
   },
   {
     icon: (
@@ -48,7 +48,7 @@ const diferenciais = [
     title: "Psicologia das cores: Um gatilho para cada página",
     description:
       'Esqueça a ideia de que as cores em MERRY RAINS são só decorativas. Elas são armas.\n\nPara escrever esta obra, não bastou criatividade; foi preciso mergulhar fundo em estudos psicológicos e psiquiátricos. Cada cena foi desenhada para atingir picos emocionais específicos através da manipulação cromática e do comportamento humano real.\n\nA gente não quer apenas que você leia a história; a gente quer que o seu cérebro reaja a ela.\n\nO tom de azul não está lá por acaso, e aquela sensação de desconforto que surge do nada tem uma explicação científica por trás. É uma experiência literária pensada para mexer com o seu subconsciente e te levar do êxtase à angústia em segundos.\n\nPrepare o psicológico: você não está apenas lendo um livro, está entrando em um laboratório de emoções.',
-    comparison: "Cada releitura revela novas camadas escondidas.",
+    comparison: "Prepare-se para sair da zona de conforto, aqui você mudará do topo ao poço em poucas páginas, ou vice-versa.",
   },
   {
     icon: (
@@ -62,10 +62,10 @@ const diferenciais = [
         <line x1="20" y1="23" x2="20" y2="32" stroke="currentColor" strokeWidth="1" opacity="0.3" />
       </svg>
     ),
-    title: "Protagonista que Quebra Padroes",
+    title: "Protagonista fora do comum",
     description:
-      "Lira nao e a heroina tipica. Ela e cientista, vulneravel, imperfeita e extraordinariamente humana. Sua jornada nao e sobre salvar o mundo com poderes magicos, mas sobre decifrar o impossivel com curiosidade e coragem.",
-    comparison: "Uma heroina para quem acredita que a mente e a maior arma.",
+      "Ela não está aqui para ser salva. Ela dita o ritmo, resolve a parada e bota pra fuder porque o mundo é de quem faz.",
+    comparison: "Esqueça amiguinhos ou família, aqui ela mesmo resolve seus B.O.",
   },
   {
     icon: (
@@ -75,10 +75,10 @@ const diferenciais = [
         <circle cx="20" cy="20" r="2" fill="currentColor" />
       </svg>
     ),
-    title: "Experiencia Sensorial Imersiva",
+    title: "Experiência Sensorial Imersiva",
     description:
       "Esqueça o papel e a tela. Nossa narrativa sensorial ativa seus sentidos de forma profunda: do ritmo da escrita ao impacto visual das artes. Sinta a umidade do ar, o eco dos passos e a pulsação de cada lugar. Uma jornada completa, feita para quem não quer apenas ler, mas viver a obra.",
-    comparison: "Mais que um livro. Uma imersao completa.",
+    comparison: "Você sente que ele é mais físico do que muitos livros físicos, mesmo sendo digital.",
   },
   {
     icon: (
@@ -89,10 +89,10 @@ const diferenciais = [
         <path d="M20 8V14" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
       </svg>
     ),
-    title: "Plottwist Nível ** * **",
+    title: "Plottwist Nível ***** ** ****",
     description:
       'Sabe aquela mania de ler um livro e já querer adivinhar o final no terceiro capítulo porque você "já viu de tudo"? Pois é, aqui essa sua confiança morre.\n\nNesta categoria, o autor não está tentando ser seu amigo; ele está tentando te fazer de otário. Ele te pega pela mão, te faz acreditar que você é o mestre da dedução, e no último segundo ele puxa o tapete com tanta força que você esquece até como respira.\n\nNão é um suspense comum de "quem matou?". É uma quebra de realidade total.\n\nÉ aquele tipo de livro que, quando você termina e deixa ele de lado, o silêncio da sala fica pesado. Você vai ficar encarando a parede por meia hora, sentindo aquela ponta de raiva por ter sido tão cego, e vai ser obrigado a reabrir na primeira página só pra entender onde foi que você perdeu o fio da meada.\n\nNível Ilha do Medo, Clube da Luta e O Sexto Sentido. Se você não aguenta ter suas certezas destruídas ou detesta se sentir enganado, passe longe. Mas se você busca aquele livro que não sai da sua cabeça nem depois de uma semana... prepare-se para o seu próximo trauma favorito.',
-    comparison: "Não é quem matou. É o que você não viu chegando.",
+    comparison: "Antes de falar qualquer coisa sobre o livro, leia até chegar na contracapa, após isso fique á vontade para dar a sua opinião.",
   },
 ]
 

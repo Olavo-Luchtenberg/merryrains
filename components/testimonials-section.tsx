@@ -44,7 +44,7 @@ export function TestimonialsSection() {
         </ScrollReveal>
         <ScrollReveal delay={100}>
           <h2 className="text-center text-2xl sm:text-4xl md:text-5xl font-bold font-serif text-foreground mb-8 sm:mb-12 md:mb-16 text-balance">
-            Leitores que ja viveram essa jornada
+          Leitores Beta que já tiveram um gostinho amargo dessa jornada.
           </h2>
         </ScrollReveal>
 
