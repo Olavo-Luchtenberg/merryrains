@@ -22,7 +22,7 @@ export default function Home() {
 
   return (
     <>
-      <RainEffect />
+      <RainEffect showSplash={hasChosen} />
       <CursorGlow />
 
       {/* RainSound sempre montado para poder auto-iniciar no mesmo gesto do clique em Entrar */}

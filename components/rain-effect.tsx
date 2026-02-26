@@ -58,7 +58,7 @@ function umbrellaYAt(x: number, umbrella: UmbrellaShape): number | null {
   return surfaceY
 }
 
-export function RainEffect() {
+export function RainEffect({ showSplash = false }: { showSplash?: boolean }) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const mouseRef = useRef({ x: -1000, y: -1000 })
   const dropsRef = useRef<RainDrop[]>([])
@@ -67,7 +67,15 @@ export function RainEffect() {
   const animationRef = useRef<number>(0)
   const timeRef = useRef(0)
   const splashVisibleRef = useRef(false)
+  const showSplashRef = useRef(showSplash)
   const umbrellaRef = useRef<UmbrellaShape>({ cx: 0, cy: 0, r: 0 })
+
+  // Mantém a ref sincronizada com a prop
+  useEffect(() => {
+    showSplashRef.current = showSplash
+    // Reavalia a colisão quando a prop muda
+    splashVisibleRef.current = showSplash && window.scrollY === 0
+  }, [showSplash])
 
   const initDrops = useCallback((width: number, height: number) => {
     const drops: RainDrop[] = []
@@ -140,9 +148,9 @@ export function RainEffect() {
     }
     window.addEventListener("mousemove", handleMouseMove)
 
-    // Colisão ativa apenas quando no topo da página (sem scroll)
+    // Colisão ativa apenas quando: usuário entrou no site E está no topo da página
     const handleScroll = () => {
-      splashVisibleRef.current = window.scrollY === 0
+      splashVisibleRef.current = showSplashRef.current && window.scrollY === 0
     }
     handleScroll()
     window.addEventListener("scroll", handleScroll, { passive: true })
