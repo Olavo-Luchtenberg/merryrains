@@ -81,8 +81,9 @@ export function FloatingNav() {
     <>
       {/* Desktop nav */}
       <nav
-        className="fixed top-4 sm:top-6 left-1/2 -translate-x-1/2 z-40 transition-all duration-500 hidden md:block"
+        className="fixed top-4 sm:top-6 z-40 transition-all duration-500 hidden md:block"
         style={{
+          left: "50%",
           opacity: visible ? 1 : 0,
           transform: `translateX(-50%) translateY(${visible ? 0 : -20}px)`,
           pointerEvents: visible ? "auto" : "none",
