@@ -86,14 +86,14 @@ export function CtaSection() {
         <ScrollReveal delay={400}>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <a
-              href="#"
+              href="/registro?returnTo=/checkout"
               className="group relative inline-flex items-center justify-center gap-2 px-6 py-3.5 text-sm font-bold tracking-wider uppercase bg-primary text-primary-foreground rounded-lg overflow-hidden font-sans whitespace-nowrap"
             >
               <span className="relative z-10">QUERO SENTIR A EXPERIENCIA</span>
               <div className="absolute inset-0 bg-accent/80 translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
             </a>
             <p className="text-sm text-muted-foreground font-sans">
-              Disponivel em breve
+              Crie sua conta e finalize a compra
             </p>
           </div>
         </ScrollReveal>

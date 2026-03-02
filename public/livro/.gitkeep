@@ -1,0 +1,3 @@
+# Coloque as páginas do livro aqui como:
+# pagina-001.jpg, pagina-002.jpg, ... pagina-1000.jpg
+# Ou use .png se preferir (atualize book-reader.tsx)

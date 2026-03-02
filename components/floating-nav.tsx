@@ -12,11 +12,13 @@ import {
 } from "@/components/ui/sheet"
 import { Button } from "@/components/ui/button"
 
-const links = [
+const links: { href: string; label: string; external?: boolean }[] = [
   { href: "#previa", label: "Previa" },
   { href: "#diferencial", label: "Diferencial" },
   { href: "#autor", label: "Autor" },
   { href: "#comprar", label: "Comprar" },
+  { href: "/login", label: "Entrar", external: true },
+  { href: "/biblioteca", label: "Biblioteca", external: true },
 ]
 
 export function FloatingNav() {
@@ -60,20 +62,31 @@ export function FloatingNav() {
       >
         Página inicial
       </button>
-      {links.map((link) => (
-        <a
-          key={link.href}
-          href={link.href}
-          onClick={() => setSheetOpen(false)}
-          className={`block px-4 py-2 text-sm font-semibold tracking-wider uppercase rounded-full transition-colors font-sans ${
-            activeSection === link.href.slice(1)
-              ? "bg-primary text-primary-foreground"
-              : "text-muted-foreground hover:text-foreground"
-          }`}
-        >
-          {link.label}
-        </a>
-      ))}
+      {links.map((link) =>
+        link.external ? (
+          <a
+            key={link.href}
+            href={link.href}
+            onClick={() => setSheetOpen(false)}
+            className="block px-4 py-2 text-sm font-semibold tracking-wider uppercase rounded-full transition-colors font-sans text-muted-foreground hover:text-foreground"
+          >
+            {link.label}
+          </a>
+        ) : (
+          <a
+            key={link.href}
+            href={link.href}
+            onClick={() => setSheetOpen(false)}
+            className={`block px-4 py-2 text-sm font-semibold tracking-wider uppercase rounded-full transition-colors font-sans ${
+              activeSection === link.href.slice(1)
+                ? "bg-primary text-primary-foreground"
+                : "text-muted-foreground hover:text-foreground"
+            }`}
+          >
+            {link.label}
+          </a>
+        ),
+      )}
     </>
   )
 
@@ -106,19 +119,29 @@ export function FloatingNav() {
           >
             Início
           </button>
-          {links.map((link) => (
-            <a
-              key={link.href}
-              href={link.href}
-              className={`px-4 py-2 text-xs font-semibold tracking-wider uppercase rounded-full transition-colors font-sans ${
-                activeSection === link.href.slice(1)
-                  ? "bg-primary text-primary-foreground"
-                  : "text-muted-foreground hover:text-foreground"
-              }`}
-            >
-              {link.label}
-            </a>
-          ))}
+          {links.map((link) =>
+            link.external ? (
+              <a
+                key={link.href}
+                href={link.href}
+                className="px-4 py-2 text-xs font-semibold tracking-wider uppercase rounded-full transition-colors font-sans text-muted-foreground hover:text-foreground"
+              >
+                {link.label}
+              </a>
+            ) : (
+              <a
+                key={link.href}
+                href={link.href}
+                className={`px-4 py-2 text-xs font-semibold tracking-wider uppercase rounded-full transition-colors font-sans ${
+                  activeSection === link.href.slice(1)
+                    ? "bg-primary text-primary-foreground"
+                    : "text-muted-foreground hover:text-foreground"
+                }`}
+              >
+                {link.label}
+              </a>
+            ),
+          )}
         </div>
       </nav>
 
