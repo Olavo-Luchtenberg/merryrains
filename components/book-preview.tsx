@@ -3,6 +3,24 @@
 import React, { useRef, useState, useEffect, useCallback } from "react"
 import HTMLFlipBook from "react-pageflip"
 
+// Ícones inline para fullscreen
+function IconExpand() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <polyline points="15 3 21 3 21 9" /><polyline points="9 21 3 21 3 15" />
+      <line x1="21" y1="3" x2="14" y2="10" /><line x1="3" y1="21" x2="10" y2="14" />
+    </svg>
+  )
+}
+function IconShrink() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <polyline points="4 14 10 14 10 20" /><polyline points="20 10 14 10 14 4" />
+      <line x1="10" y1="14" x2="3" y2="21" /><line x1="21" y1="3" x2="14" y2="10" />
+    </svg>
+  )
+}
+
 const BOOK_PAGE_IMAGES = [
   "/book-pages/Livro%201.png",
   "/book-pages/LIvro%202.png",
@@ -32,15 +50,71 @@ function emitBookRect(el: HTMLElement | null) {
 export function BookPreview() {
   const bookRef = useRef<HTMLFlipBook>(null)
   const containerRef = useRef<HTMLDivElement>(null)
+  const fullscreenRef = useRef<HTMLDivElement>(null)
   const [pageWidth, setPageWidth] = useState(320)
   const [pageHeight, setPageHeight] = useState(448)
+  const [fsPageWidth, setFsPageWidth] = useState(400)
+  const [fsPageHeight, setFsPageHeight] = useState(560)
   const [coverWidth, setCoverWidth] = useState(320)
   const [coverHeight, setCoverHeight] = useState(448)
   const [currentPage, setCurrentPage] = useState(0)
   const [opened, setOpened] = useState(false)
   const [mounted, setMounted] = useState(false)
+  const [isFullscreen, setIsFullscreen] = useState(false)
 
   useEffect(() => { setMounted(true) }, [])
+
+  // Calcula dimensões para tela cheia: maximiza o livro na tela
+  const calcFsSize = useCallback(() => {
+    const vw = window.innerWidth
+    const vh = window.innerHeight
+    const controlsH = 72 // altura dos controles embaixo
+    const availH = vh - controlsH
+    const availW = vw - 16 // margem mínima
+
+    // Tenta preencher pela altura primeiro
+    let h = availH
+    let w = Math.round(h * (400 / 560))
+    // Se as duas páginas não cabem na largura, limita pela largura
+    if (w * 2 > availW) {
+      w = Math.floor(availW / 2)
+      h = Math.round(w * (560 / 400))
+    }
+    setFsPageWidth(w)
+    setFsPageHeight(h)
+  }, [])
+
+  // Escuta mudanças de fullscreen (ESC do browser)
+  useEffect(() => {
+    const onFsChange = () => {
+      const isFull = !!document.fullscreenElement
+      setIsFullscreen(isFull)
+      if (isFull) calcFsSize()
+    }
+    document.addEventListener("fullscreenchange", onFsChange)
+    return () => document.removeEventListener("fullscreenchange", onFsChange)
+  }, [calcFsSize])
+
+  // Recalcula ao redimensionar em fullscreen
+  useEffect(() => {
+    if (!isFullscreen) return
+    const onResize = () => calcFsSize()
+    window.addEventListener("resize", onResize)
+    return () => window.removeEventListener("resize", onResize)
+  }, [isFullscreen, calcFsSize])
+
+  const toggleFullscreen = useCallback(async () => {
+    if (!isFullscreen) {
+      try {
+        await fullscreenRef.current?.requestFullscreen()
+        calcFsSize()
+      } catch { /* ignore */ }
+    } else {
+      try {
+        await document.exitFullscreen()
+      } catch { /* ignore */ }
+    }
+  }, [isFullscreen, calcFsSize])
 
   // Emite posição do livro para o RainEffect sempre que muda
   useEffect(() => {
@@ -153,18 +227,40 @@ export function BookPreview() {
     )
   }
 
+  const activeW = isFullscreen ? fsPageWidth : pageWidth
+  const activeH = isFullscreen ? fsPageHeight : pageHeight
+
   // --- LIVRO ABERTO: duas páginas lado a lado ---
   return (
-    <div className="w-full flex flex-col items-center gap-6 py-8 px-4">
+    <div
+      ref={fullscreenRef}
+      className={`relative flex flex-col items-center justify-center gap-4 ${
+        isFullscreen
+          ? "fixed inset-0 z-[9999] bg-black"
+          : "w-full py-8 px-4"
+      }`}
+    >
+      {/* Botão tela cheia — fixo no canto superior direito */}
+      <button
+        onClick={toggleFullscreen}
+        title={isFullscreen ? "Sair da tela cheia" : "Tela cheia"}
+        className="absolute top-4 right-4 z-10 flex items-center gap-2 text-xs font-sans text-muted-foreground hover:text-foreground transition-colors border border-border/50 rounded-full px-3 py-1.5 hover:bg-white/5 bg-black/60 backdrop-blur-sm"
+        style={{ position: isFullscreen ? "fixed" : "absolute" }}
+      >
+        {isFullscreen ? <IconShrink /> : <IconExpand />}
+        {isFullscreen ? "Sair da tela cheia" : "Tela cheia"}
+      </button>
+
       <div
         ref={containerRef}
         className="shadow-2xl [&_.stf__wrapper]:!bg-transparent [&_.stf__block]:!bg-transparent"
-        style={{ width: pageWidth * 2, height: pageHeight }}
+        style={{ width: activeW * 2, height: activeH, flexShrink: 0 }}
       >
         <HTMLFlipBook
+          key={`book-${isFullscreen ? "fs" : "normal"}-${activeW}-${activeH}`}
           ref={bookRef}
-          width={pageWidth}
-          height={pageHeight}
+          width={activeW}
+          height={activeH}
           size="fixed"
           minWidth={0}
           maxWidth={0}
@@ -180,6 +276,7 @@ export function BookPreview() {
           drawShadow
           className="flipbook"
           onFlip={handleFlip}
+          startPage={currentPage}
         >
           {BOOK_PAGE_IMAGES.map((src, i) => (
             <div
@@ -221,7 +318,11 @@ export function BookPreview() {
       </div>
 
       <button
-        onClick={() => { setOpened(false); setCurrentPage(0) }}
+        onClick={() => {
+          if (isFullscreen) document.exitFullscreen().catch(() => {})
+          setOpened(false)
+          setCurrentPage(0)
+        }}
         className="text-muted-foreground text-xs hover:text-foreground transition-colors underline underline-offset-4"
       >
         Fechar livro
