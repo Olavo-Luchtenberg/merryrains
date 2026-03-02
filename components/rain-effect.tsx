@@ -36,6 +36,15 @@ interface UmbrellaShape {
   r: number    // raio do semicírculo
 }
 
+// Livro: retângulo definido por posição e tamanho na tela
+interface BookRect {
+  left: number
+  top: number
+  right: number
+  bottom: number
+  width: number
+}
+
 function createDrop(width: number, height: number, randomY: boolean): RainDrop {
   const baseSpeed = Math.random() * 4 + 4
   return {
@@ -69,6 +78,7 @@ export function RainEffect({ showSplash = false }: { showSplash?: boolean }) {
   const splashVisibleRef = useRef(false)
   const showSplashRef = useRef(showSplash)
   const umbrellaRef = useRef<UmbrellaShape>({ cx: 0, cy: 0, r: 0 })
+  const bookRectRef = useRef<BookRect | null>(null)
 
   // Mantém a ref sincronizada com a prop
   useEffect(() => {
@@ -155,6 +165,13 @@ export function RainEffect({ showSplash = false }: { showSplash?: boolean }) {
     handleScroll()
     window.addEventListener("scroll", handleScroll, { passive: true })
 
+    // Recebe posição do livro emitida pelo BookPreview
+    const handleBookRect = (e: Event) => {
+      const detail = (e as CustomEvent<BookRect>).detail
+      bookRectRef.current = detail
+    }
+    window.addEventListener("book-rect-update", handleBookRect)
+
     const createSplashAt = (x: number, y: number) => {
       const count = Math.floor(Math.random() * 3) + 2
       for (let s = 0; s < count; s++) {
@@ -189,6 +206,7 @@ export function RainEffect({ showSplash = false }: { showSplash?: boolean }) {
       const globalWind = Math.sin(timeRef.current * 0.005) * 0.5
       const umbrella = umbrellaRef.current
       const splashVisible = splashVisibleRef.current
+      const bookRect = bookRectRef.current
 
       for (let i = 0; i < dropsRef.current.length; i++) {
         const drop = dropsRef.current[i]
@@ -228,6 +246,32 @@ export function RainEffect({ showSplash = false }: { showSplash?: boolean }) {
           const surfaceYStart = umbrellaYAt(startX, umbrella)
           if (surfaceYStart !== null && startY >= surfaceYStart) {
             createSplashAt(startX, surfaceYStart)
+            dropsRef.current[i] = createDrop(canvas.width, canvas.height, false)
+            continue
+          }
+        }
+
+        // Colisão com o livro (hitbox retangular no topo)
+        if (bookRect) {
+          // Verifica se a ponta da gota cruza o topo do livro
+          const prevEndY = endY - drop.speed
+          if (
+            endX >= bookRect.left &&
+            endX <= bookRect.right &&
+            prevEndY < bookRect.top &&
+            endY >= bookRect.top
+          ) {
+            createSplashAt(endX, bookRect.top)
+            dropsRef.current[i] = createDrop(canvas.width, canvas.height, false)
+            continue
+          }
+          // Gota já dentro do livro (nasceu dentro) — reseta sem splash
+          if (
+            endX >= bookRect.left &&
+            endX <= bookRect.right &&
+            endY >= bookRect.top &&
+            endY <= bookRect.bottom
+          ) {
             dropsRef.current[i] = createDrop(canvas.width, canvas.height, false)
             continue
           }
@@ -324,6 +368,7 @@ export function RainEffect({ showSplash = false }: { showSplash?: boolean }) {
       window.removeEventListener("resize", resize)
       window.removeEventListener("mousemove", handleMouseMove)
       window.removeEventListener("scroll", handleScroll)
+      window.removeEventListener("book-rect-update", handleBookRect)
       cancelAnimationFrame(animationRef.current)
     }
   }, [initDrops, updateUmbrellaShape])

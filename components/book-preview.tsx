@@ -15,8 +15,23 @@ const BOOK_PAGE_IMAGES = [
   ...Array.from({ length: 30 }, (_, i) => `/book-pages/${i + 9}.png`),
 ]
 
+function emitBookRect(el: HTMLElement | null) {
+  if (!el) return
+  const rect = el.getBoundingClientRect()
+  window.dispatchEvent(new CustomEvent("book-rect-update", {
+    detail: {
+      left: rect.left,
+      top: rect.top,
+      right: rect.right,
+      bottom: rect.bottom,
+      width: rect.width,
+    }
+  }))
+}
+
 export function BookPreview() {
   const bookRef = useRef<HTMLFlipBook>(null)
+  const containerRef = useRef<HTMLDivElement>(null)
   const [pageWidth, setPageWidth] = useState(320)
   const [pageHeight, setPageHeight] = useState(448)
   const [coverWidth, setCoverWidth] = useState(320)
@@ -26,6 +41,24 @@ export function BookPreview() {
   const [mounted, setMounted] = useState(false)
 
   useEffect(() => { setMounted(true) }, [])
+
+  // Emite posição do livro para o RainEffect sempre que muda
+  useEffect(() => {
+    if (!mounted) return
+    const el = containerRef.current
+    const update = () => emitBookRect(el)
+    update()
+    window.addEventListener("scroll", update, { passive: true })
+    window.addEventListener("resize", update)
+    return () => {
+      window.removeEventListener("scroll", update)
+      window.removeEventListener("resize", update)
+      // Limpa a hitbox ao desmontar
+      window.dispatchEvent(new CustomEvent("book-rect-update", {
+        detail: { left: 0, top: -9999, right: 0, bottom: -9999, width: 0 }
+      }))
+    }
+  }, [mounted, opened, coverWidth, coverHeight, pageWidth, pageHeight])
 
   useEffect(() => {
     if (!mounted) return
@@ -88,6 +121,7 @@ export function BookPreview() {
     return (
       <div className="w-full flex flex-col items-center gap-4 py-8">
         <div
+          ref={containerRef}
           className="relative group cursor-pointer shadow-2xl rounded-sm overflow-hidden mx-auto"
           style={{ width: coverWidth, height: coverHeight, flexShrink: 0 }}
           onClick={handleOpenBook}
@@ -117,6 +151,7 @@ export function BookPreview() {
   return (
     <div className="w-full flex flex-col items-center gap-6 py-8 px-4">
       <div
+        ref={containerRef}
         className="shadow-2xl [&_.stf__wrapper]:!bg-transparent [&_.stf__block]:!bg-transparent"
         style={{ width: pageWidth * 2, height: pageHeight }}
       >
