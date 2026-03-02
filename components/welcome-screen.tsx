@@ -67,11 +67,11 @@ export function WelcomeScreen() {
 
       <div className="relative z-10 max-w-lg w-full text-center">
         <h1 className="font-serif text-4xl sm:text-5xl md:text-6xl font-bold text-foreground mb-4 animate-in fade-in slide-in-from-bottom-4 duration-700">
-          Seja Bem Vindo
+          Seja Bem-Vindo
         </h1>
 
         <p className="text-muted-foreground text-lg sm:text-xl mb-12 animate-in fade-in slide-in-from-bottom-4 duration-700 delay-150">
-          Para que a experiência seja mais imersiva, comece escolhendo a sua trilha sonora
+          Para que a experiência seja mais imersiva, comece escolhendo a sua trilha sonora!
         </p>
 
         <div className="flex flex-wrap justify-center gap-3 mb-12 animate-in fade-in slide-in-from-bottom-4 duration-700 delay-300">

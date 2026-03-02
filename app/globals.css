@@ -89,21 +89,14 @@
   html {
     scroll-behavior: smooth;
     -webkit-text-size-adjust: 100%;
+    cursor: default !important;
   }
   body {
     @apply bg-background text-foreground;
+    cursor: default !important;
   }
-  /* Custom cursor only on devices with mouse (not touch) */
-  @media (hover: hover) and (pointer: fine) {
-    body { cursor: none; }
-    a, button, input, textarea, select, [role="button"] {
-      cursor: none !important;
-    }
-  }
-  @media (hover: none) or (pointer: coarse) {
-    a, button, input, textarea, select, [role="button"] {
-      cursor: pointer !important;
-    }
+  a, button, [role="button"] {
+    cursor: pointer;
   }
   ::-webkit-scrollbar {
     width: 6px;

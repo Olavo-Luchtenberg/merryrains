@@ -33,7 +33,7 @@ export function Footer() {
                 href="#previa"
                 className="text-sm text-muted-foreground hover:text-primary transition-colors font-sans"
               >
-                Previa
+                Prévia
               </a>
               <a
                 href="#comprar"

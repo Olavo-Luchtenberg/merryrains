@@ -37,7 +37,7 @@ interface UmbrellaShape {
 }
 
 function createDrop(width: number, height: number, randomY: boolean): RainDrop {
-  const baseSpeed = Math.random() * 6 + 6
+  const baseSpeed = Math.random() * 4 + 4
   return {
     x: Math.random() * width,
     y: randomY ? Math.random() * height : -(Math.random() * 100),
