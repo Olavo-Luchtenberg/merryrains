@@ -18,7 +18,6 @@ const links: { href: string; label: string; external?: boolean }[] = [
   { href: "#autor", label: "Autor" },
   { href: "#comprar", label: "Comprar" },
   { href: "/login", label: "Entrar", external: true },
-  { href: "/biblioteca", label: "Biblioteca", external: true },
 ]
 
 export function FloatingNav() {
