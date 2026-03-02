@@ -64,6 +64,8 @@ export function BookReader() {
         <img
           src={pagePath}
           alt={`Página ${currentPage}`}
+          draggable={false}
+          onContextMenu={(e) => e.preventDefault()}
           className="max-w-full max-h-full object-contain"
           onError={(e) => {
             // Fallback quando a imagem não existe (placeholder)

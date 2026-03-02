@@ -94,6 +94,39 @@
   body {
     @apply bg-background text-foreground;
     cursor: default !important;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+  }
+  /* Permitir seleção em inputs para login/cadastro */
+  input,
+  textarea,
+  [contenteditable="true"] {
+    -webkit-user-select: text;
+    -moz-user-select: text;
+    -ms-user-select: text;
+    user-select: text;
+  }
+  /* Impedir impressão - esconde conteúdo e mostra mensagem */
+  @media print {
+    body * {
+      visibility: hidden !important;
+    }
+    body {
+      visibility: visible !important;
+    }
+    body::before {
+      content: "Impressão não autorizada. Conteúdo protegido.";
+      visibility: visible !important;
+      display: block !important;
+      position: fixed !important;
+      top: 50% !important;
+      left: 50% !important;
+      transform: translate(-50%, -50%) !important;
+      font-size: 1.5rem !important;
+      text-align: center !important;
+    }
   }
   a, button, [role="button"] {
     cursor: pointer;

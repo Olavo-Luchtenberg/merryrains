@@ -22,12 +22,13 @@ export function BibliotecaContent({ hasPurchase }: { hasPurchase: boolean }) {
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {LIVROS.map((livro) => (
           <Card key={livro.id} className="overflow-hidden border-border">
-            <div className="relative aspect-[3/4]">
+            <div className="relative aspect-[3/4] select-none">
               <Image
                 src={livro.cover}
                 alt={livro.title}
                 fill
-                className="object-cover"
+                className="object-cover pointer-events-none"
+                draggable={false}
               />
             </div>
             <CardContent className="p-4">

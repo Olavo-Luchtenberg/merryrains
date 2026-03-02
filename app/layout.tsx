@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from 'next'
 import { Inter, Playfair_Display } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
 import { Providers } from '@/components/providers'
+import { AntiPiracy } from '@/components/anti-piracy'
 import './globals.css'
 
 const _inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
@@ -47,6 +48,7 @@ export default function RootLayout({
     <html lang="pt-BR">
       <body className={`${_inter.variable} ${_playfair.variable} font-sans antialiased`}>
         <Providers>
+          <AntiPiracy />
           {children}
           <Analytics />
         </Providers>
