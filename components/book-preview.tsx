@@ -45,20 +45,26 @@ export function BookPreview() {
   // Emite posição do livro para o RainEffect sempre que muda
   useEffect(() => {
     if (!mounted) return
-    const el = containerRef.current
-    const update = () => emitBookRect(el)
-    update()
+    // Usa rAF para garantir que o DOM já atualizou antes de ler o rect
+    const update = () => emitBookRect(containerRef.current)
+    const rafUpdate = () => requestAnimationFrame(update)
+    rafUpdate()
     window.addEventListener("scroll", update, { passive: true })
-    window.addEventListener("resize", update)
+    window.addEventListener("resize", rafUpdate)
     return () => {
       window.removeEventListener("scroll", update)
-      window.removeEventListener("resize", update)
-      // Limpa a hitbox ao desmontar
+      window.removeEventListener("resize", rafUpdate)
+    }
+  }, [mounted, opened, coverWidth, coverHeight, pageWidth, pageHeight])
+
+  // Limpa a hitbox ao desmontar o componente
+  useEffect(() => {
+    return () => {
       window.dispatchEvent(new CustomEvent("book-rect-update", {
         detail: { left: 0, top: -9999, right: 0, bottom: -9999, width: 0 }
       }))
     }
-  }, [mounted, opened, coverWidth, coverHeight, pageWidth, pageHeight])
+  }, [])
 
   useEffect(() => {
     if (!mounted) return
@@ -195,7 +201,7 @@ export function BookPreview() {
       <div className="flex items-center gap-6">
         <button
           onClick={goPrev}
-          disabled={currentPage === 0}
+          disabled={currentPage <= 1}
           className="px-5 py-2 rounded-full border border-border text-sm font-sans text-foreground hover:bg-white/10 disabled:opacity-30 disabled:cursor-not-allowed transition-all"
         >
           ← Anterior
