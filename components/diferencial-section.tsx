@@ -2,93 +2,46 @@
 
 import { ScrollReveal } from "./scroll-reveal"
 import { useRef, useState } from "react"
+import Image from "next/image"
 
 const diferenciais = [
   {
-    icon: (
-      <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <circle cx="20" cy="20" r="18" stroke="currentColor" strokeWidth="1.5" opacity="0.3" />
-        <circle cx="20" cy="12" r="4" stroke="currentColor" strokeWidth="1.5" />
-        <circle cx="12" cy="26" r="3" stroke="currentColor" strokeWidth="1.5" />
-        <circle cx="28" cy="26" r="3" stroke="currentColor" strokeWidth="1.5" />
-        <line x1="18" y1="15" x2="13.5" y2="23.5" stroke="currentColor" strokeWidth="1.5" />
-        <line x1="22" y1="15" x2="26.5" y2="23.5" stroke="currentColor" strokeWidth="1.5" />
-        <line x1="15" y1="26" x2="25" y2="26" stroke="currentColor" strokeWidth="1.5" />
-      </svg>
-    ),
+    icon: "/Simbulo 1.png",
     title: "A nova era do suspense: menos peças, mais jogo",
     description:
       'Esqueça as tramas inchadas com mil personagens e cenários que você nem lembra o nome. MERRY RAINS veio para quebrar o mercado com uma proposta que você nunca viu antes.\n\nAqui, cada elemento foi colocado com precisão cirúrgica. Temos poucos personagens e poucos lugares, mas todos estrategicamente posicionados para te encurralar. Nada é figurante: um objeto sobre a mesa, uma cor na parede ou uma única linha de diálogo são peças de um quebra-cabeça de manipulação pura.\n\nÉ um texto refinado, denso e visualmente explosivo, nunca um livro usou as cores com tanta intenção.\n\nNão estamos entregando uma leitura passiva; estamos entregando um ambiente de pressão psicológica constante. Cada detalhe foi escolhido a dedo para que, quando a armadilha fechar, você perceba que a pista estava na sua cara o tempo todo.\n\nMinimalista na forma, brutal no impacto.',
     comparison: "Cada frase lida é uma facada na mente do leitor.",
   },
   {
-    icon: (
-      <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M20 4L4 14V26L20 36L36 26V14L20 4Z" stroke="currentColor" strokeWidth="1.5" opacity="0.3" />
-        <path d="M20 4L20 36" stroke="currentColor" strokeWidth="1.5" opacity="0.2" />
-        <path d="M4 14L36 14" stroke="currentColor" strokeWidth="1" opacity="0.15" />
-        <circle cx="20" cy="20" r="6" stroke="currentColor" strokeWidth="1.5" />
-        <circle cx="20" cy="20" r="2" fill="currentColor" />
-      </svg>
-    ),
+    icon: "/Simbulo 2.png",
     title: "Wordbuilding: Aqui a ciência não é enfeite",
     description:
       'Em MERRY RAINS, esqueça aquela fantasia onde as coisas acontecem "porque sim" ou por pura conveniência do roteiro. Aqui, o buraco é mais embaixo.\n\nCada engrenagem, cada fenômeno e cada detalhe desse universo foi levantado do zero em cima de teorias científicas reais. A gente não criou só um cenário; a gente construiu um sistema com uma lógica interna tão amarrada que chega a ser fascinante. Se algo acontece, existe um "porquê" físico, químico ou biológico por trás.\n\nÉ o tipo de worldbuilding feito para quem gosta de entender as regras do jogo e se perder nos detalhes. Se você é do time que ama quando a ficção faz sentido de verdade e respeita a sua inteligência... parabéns, você acabou de encontrar o seu lugar.',
     comparison: "Antes de pensar em escrever sequer uma palavra Yharus prezou pela coesão e lógica da obra.",
   },
   {
-    icon: (
-      <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <rect x="6" y="6" width="28" height="28" rx="4" stroke="currentColor" strokeWidth="1.5" opacity="0.3" />
-        <path d="M12 28C12 28 16 16 20 16C24 16 28 28 28 28" stroke="currentColor" strokeWidth="1.5" />
-        <path d="M14 24C14 24 17 18 20 18C23 18 26 24 26 24" stroke="currentColor" strokeWidth="1.5" opacity="0.5" />
-        <circle cx="20" cy="12" r="2" fill="currentColor" />
-      </svg>
-    ),
+    icon: "/Simbulo 3.png",
     title: "Psicologia das cores: Um gatilho para cada página",
     description:
       'Esqueça a ideia de que as cores em MERRY RAINS são só decorativas. Elas são armas.\n\nPara escrever esta obra, não bastou criatividade; foi preciso mergulhar fundo em estudos psicológicos e psiquiátricos. Cada cena foi desenhada para atingir picos emocionais específicos através da manipulação cromática e do comportamento humano real.\n\nA gente não quer apenas que você leia a história; a gente quer que o seu cérebro reaja a ela.\n\nO tom de azul não está lá por acaso, e aquela sensação de desconforto que surge do nada tem uma explicação científica por trás. É uma experiência literária pensada para mexer com o seu subconsciente e te levar do êxtase à angústia em segundos.\n\nPrepare o psicológico: você não está apenas lendo um livro, está entrando em um laboratório de emoções.',
     comparison: "Prepare-se para sair da zona de conforto, aqui você mudará do topo ao poço em poucas páginas, ou vice-versa.",
   },
   {
-    icon: (
-      <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M8 20C8 13.4 13.4 8 20 8" stroke="currentColor" strokeWidth="1.5" />
-        <path d="M32 20C32 26.6 26.6 32 20 32" stroke="currentColor" strokeWidth="1.5" />
-        <path d="M20 8C26.6 8 32 13.4 32 20" stroke="currentColor" strokeWidth="1.5" opacity="0.4" />
-        <path d="M20 32C13.4 32 8 26.6 8 20" stroke="currentColor" strokeWidth="1.5" opacity="0.4" />
-        <circle cx="20" cy="20" r="3" stroke="currentColor" strokeWidth="1.5" />
-        <line x1="20" y1="17" x2="20" y2="8" stroke="currentColor" strokeWidth="1" opacity="0.3" />
-        <line x1="20" y1="23" x2="20" y2="32" stroke="currentColor" strokeWidth="1" opacity="0.3" />
-      </svg>
-    ),
+    icon: "/Simbulo 4.png",
     title: "Protagonista fora do comum",
     description:
       "Ela não está aqui para ser salva. Ela dita o ritmo, resolve a parada e bota pra fuder porque o mundo é de quem faz.",
     comparison: "Esqueça amiguinhos ou família, aqui ela mesmo resolve seus B.O.",
   },
   {
-    icon: (
-      <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M20 6L22.5 16H33L24.5 22L27 32L20 26L13 32L15.5 22L7 16H17.5L20 6Z" stroke="currentColor" strokeWidth="1.5" opacity="0.3" />
-        <path d="M20 12L21.5 18H27L22.5 21.5L24 27L20 23.5L16 27L17.5 21.5L13 18H18.5L20 12Z" stroke="currentColor" strokeWidth="1.5" />
-        <circle cx="20" cy="20" r="2" fill="currentColor" />
-      </svg>
-    ),
+    icon: "/Simbulo 5.png",
     title: "Experiência Sensorial Imersiva",
     description:
       "Esqueça o papel e a tela. Nossa narrativa sensorial ativa seus sentidos de forma profunda: do ritmo da escrita ao impacto visual das artes. Sinta a umidade do ar, o eco dos passos e a pulsação de cada lugar. Uma jornada completa, feita para quem não quer apenas ler, mas viver a obra.",
     comparison: "Você sente que ele é mais físico do que muitos livros físicos, mesmo sendo digital.",
   },
   {
-    icon: (
-      <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M8 32L20 8L32 32" stroke="currentColor" strokeWidth="1.5" opacity="0.3" />
-        <path d="M12 28L20 14L28 28" stroke="currentColor" strokeWidth="1.5" />
-        <circle cx="20" cy="26" r="2" fill="currentColor" />
-        <path d="M20 8V14" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-      </svg>
-    ),
+    icon: "/Simbulo 6.png",
     title: "Plottwist Nível ***** ** ****",
     description:
       'Sabe aquela mania de ler um livro e já querer adivinhar o final no terceiro capítulo porque você "já viu de tudo"? Pois é, aqui essa sua confiança morre.\n\nNesta categoria, o autor não está tentando ser seu amigo; ele está tentando te fazer de otário. Ele te pega pela mão, te faz acreditar que você é o mestre da dedução, e no último segundo ele puxa o tapete com tanta força que você esquece até como respira.\n\nNão é um suspense comum de "quem matou?". É uma quebra de realidade total.\n\nÉ aquele tipo de livro que, quando você termina e deixa ele de lado, o silêncio da sala fica pesado. Você vai ficar encarando a parede por meia hora, sentindo aquela ponta de raiva por ter sido tão cego, e vai ser obrigado a reabrir na primeira página só pra entender onde foi que você perdeu o fio da meada.\n\nNível Ilha do Medo, Clube da Luta e O Sexto Sentido. Se você não aguenta ter suas certezas destruídas ou detesta se sentir enganado, passe longe. Mas se você busca aquele livro que não sai da sua cabeça nem depois de uma semana... prepare-se para o seu próximo trauma favorito.',
@@ -186,8 +139,14 @@ function DiferencialCard({
 
         <div className="relative z-10 flex flex-col md:flex-row md:items-start gap-6">
           {/* Icon */}
-          <div className="shrink-0 text-primary transition-transform duration-500 group-hover:scale-110 min-w-[32px] min-h-[32px] sm:min-w-[40px] sm:min-h-[40px]">
-            {item.icon}
+          <div className="shrink-0 transition-transform duration-500 group-hover:scale-110 w-10 h-10 sm:w-12 sm:h-12 relative">
+            <Image
+              src={item.icon}
+              alt=""
+              fill
+              className="object-contain"
+              sizes="48px"
+            />
           </div>
 
           <div className="flex-1">

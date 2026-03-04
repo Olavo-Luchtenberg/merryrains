@@ -5,21 +5,39 @@ import { Star } from "lucide-react"
 
 const testimonials = [
   {
-    text: "MERRY RAINS e o tipo de livro que voce nao consegue largar. A forma como a chuva e usada como metafora e mecanismo narrativo e brilhante.",
-    author: "Ana Beatriz",
+    text: "Eu nunca fiquei tão focada lendo um livro. Ele trabalha com estímulos visuais o tempo todo — não é aquela leitura automática, sabe? Aqui isso simplesmente não acontece. Você se sente dentro da história. É como se estivesse na pele da protagonista. Cada página parece uma experiência, não apenas palavras na tela. Não é só leitura. É vivência. Sério… é animal.",
+    author: "Emanuelle Pereira",
     role: "Leitora Beta",
     stars: 5,
   },
   {
-    text: "Uma fusao perfeita entre ficcao cientifica e fantasia. Me lembrou os melhores momentos de Asimov com a magia de Ursula K. Le Guin.",
-    author: "Carlos Eduardo",
+    text: "Eu tenho sérios problemas de concentração, mas esse autor sabe prender a gente. O ritmo dos capítulos é muito bem pensado, parece que você tá assistindo uma série daquelas que não dá pra parar no primeiro episódio. Terminei e nem vi o tempo passar, o tempo voou real.",
+    author: "Agatha Rafaela",
+    role: "Leitora Beta",
+    stars: 5,
+  },
+  {
+    text: "Olha, eu já li muita ficção desse gênero e achei que seria 'mais do mesmo'. Me enganei feio. Tem uns plot twists aqui, principalmente do meio pro fim, que eu nunca vi em lugar nenhum. Me deu vários estalos mentais, fiquei em choque com aquela virada!",
+    author: "Yas Santorini",
+    role: "Leitora Beta",
+    stars: 5,
+  },
+  {
+    text: "Vou falar a real: eu relutei pra comprar por ser digital. Mas quando comecei a ler... meu deus. A experiência é muito sensorial, você se sente dentro da cena. Dá pra perceber o capricho na edição visual do arquivo, é coisa de colecionador mesmo, só que na palma da mão.",
+    author: "Bruna Schroeder",
+    role: "Leitora Beta",
+    stars: 5,
+  },
+  {
+    text: "O que eu mais amei foi como eu me vi na protagonista. O autor pega uns sentimentos humanos muito complexos e traduz pra jornada dela de um jeito muito forte. Se você tá na dúvida se vai se conectar, só vai. É impossível não torcer por ela.",
+    author: "Tati Silva",
+    role: "Leitora Beta",
+    stars: 5,
+  },
+  {
+    text: "Leitura densa na medida certa, mas sem ser maçante. O texto respira, a história te carrega. Fazia tempo que eu não perdia a hora de dormir porque simplesmente não conseguia 'fechar' o tablet e abandonar a protagonista naquele momento.",
+    author: "Léo Jibrain",
     role: "Leitor Beta",
-    stars: 5,
-  },
-  {
-    text: "Chorei, ri e fiquei sem dormir tentando descobrir o misterio. MERRY RAINS e uma obra-prima que merece ser lida e relida.",
-    author: "Marina Costa",
-    role: "Leitora Beta",
     stars: 5,
   },
 ]
