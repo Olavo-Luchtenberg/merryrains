@@ -63,11 +63,6 @@ function RegistroForm() {
   const [showPassword, setShowPassword] = useState(false)
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
 
-  const birthDate = form.watch("birthDate")
-  const isUnder18 = birthDate
-    ? !is18Plus(new Date(birthDate))
-    : false
-
   const form = useForm<RegisterForm>({
     resolver: zodResolver(registerSchema),
     mode: "onChange", // valida ao preencher para dar feedback imediato
@@ -80,6 +75,11 @@ function RegistroForm() {
       confirmPassword: "",
     },
   })
+
+  const birthDate = form.watch("birthDate")
+  const isUnder18 = birthDate
+    ? !is18Plus(new Date(birthDate))
+    : false
 
   const onSubmit = async (data: RegisterForm) => {
     setError(null)

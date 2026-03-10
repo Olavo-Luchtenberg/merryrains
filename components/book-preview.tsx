@@ -47,6 +47,7 @@ export function BookPreview() {
   const [coverWidth, setCoverWidth] = useState(320)
   const [coverHeight, setCoverHeight] = useState(448)
   const [currentPage, setCurrentPage] = useState(0)
+  const [isFlipping, setIsFlipping] = useState(false)
   const [opened, setOpened] = useState(false)
   const [mounted, setMounted] = useState(false)
   const [isFullscreen, setIsFullscreen] = useState(false)
@@ -108,7 +109,6 @@ export function BookPreview() {
   // Emite posição do livro para o RainEffect sempre que muda
   useEffect(() => {
     if (!mounted) return
-    // Usa rAF para garantir que o DOM já atualizou antes de ler o rect
     const update = () => emitBookRect(containerRef.current)
     const rafUpdate = () => requestAnimationFrame(update)
     rafUpdate()
@@ -164,6 +164,7 @@ export function BookPreview() {
 
   const handleFlip = useCallback((e: { data: number }) => {
     setCurrentPage(e.data)
+    setIsFlipping(false)
   }, [])
 
   const handleOpenBook = () => {
@@ -174,13 +175,30 @@ export function BookPreview() {
     }, 100)
   }
 
-  const goNext = useCallback(() => bookRef.current?.pageFlip()?.flipNext(), [])
-  const goPrev = useCallback(() => bookRef.current?.pageFlip()?.flipPrev(), [])
+  const FLIP_DURATION_MS = 700
+
+  const isFirstPage = currentPage === 0
+
+  const goNext = useCallback(() => {
+    if (isFlipping || isFirstPage) return
+    setIsFlipping(true)
+    bookRef.current?.pageFlip()?.flipNext()
+    // Fallback: se onFlip não disparar (ex: fim do livro), libera após a animação
+    setTimeout(() => setIsFlipping((v) => (v ? false : v)), FLIP_DURATION_MS + 50)
+  }, [isFlipping, isFirstPage])
+
+  const goPrev = useCallback(() => {
+    if (isFlipping || isFirstPage) return
+    setIsFlipping(true)
+    bookRef.current?.pageFlip()?.flipPrev()
+    setTimeout(() => setIsFlipping((v) => (v ? false : v)), FLIP_DURATION_MS + 50)
+  }, [isFlipping, isFirstPage])
 
   // Navegação: setas, WASD (A/← anterior, D/→/W/espaço próxima), scroll do mouse
   useEffect(() => {
     if (!opened) return
     const onKeyDown = (e: KeyboardEvent) => {
+      if (isFirstPage) return
       const target = e.target as HTMLElement
       if (target.tagName === "INPUT" || target.tagName === "TEXTAREA") return
       const prevKeys = ["ArrowLeft", "KeyA", "KeyS"]
@@ -195,7 +213,7 @@ export function BookPreview() {
     }
     window.addEventListener("keydown", onKeyDown)
     return () => window.removeEventListener("keydown", onKeyDown)
-  }, [opened, goPrev, goNext])
+  }, [opened, goPrev, goNext, isFlipping, isFirstPage])
 
   // Scroll do mouse: precisa passive: false para preventDefault
   useEffect(() => {
@@ -203,13 +221,14 @@ export function BookPreview() {
     const el = containerRef.current
     if (!el) return
     const handleWheel = (e: WheelEvent) => {
+      if (isFirstPage) return
       e.preventDefault()
       if (e.deltaY > 0) goNext()
       else if (e.deltaY < 0) goPrev()
     }
     el.addEventListener("wheel", handleWheel, { passive: false })
     return () => el.removeEventListener("wheel", handleWheel)
-  }, [opened, goPrev, goNext])
+  }, [opened, goPrev, goNext, isFlipping, isFirstPage])
 
   if (!mounted) {
     return (
@@ -276,7 +295,7 @@ export function BookPreview() {
 
       <div
         ref={containerRef}
-        className="shadow-2xl [&_.stf__wrapper]:!bg-transparent [&_.stf__block]:!bg-transparent"
+        className={`shadow-2xl [&_.stf__wrapper]:!bg-transparent [&_.stf__block]:!bg-transparent ${isFirstPage ? "pointer-events-none" : ""}`}
         style={{ width: activeW * 2, height: activeH, flexShrink: 0 }}
       >
         <HTMLFlipBook
@@ -317,11 +336,11 @@ export function BookPreview() {
         </HTMLFlipBook>
       </div>
 
-      {/* Controles */}
-      <div className="flex items-center gap-6">
+      {/* Controles — na primeira página só Fechar livro funciona */}
+      <div className={`flex items-center gap-6 ${isFirstPage ? "pointer-events-none opacity-50" : ""}`}>
         <button
           onClick={goPrev}
-          disabled={currentPage <= 1}
+          disabled={currentPage <= 1 || isFlipping || isFirstPage}
           className="px-5 py-2 rounded-full border border-border text-sm font-sans text-foreground hover:bg-white/10 disabled:opacity-30 disabled:cursor-not-allowed transition-all"
         >
           ← Anterior
@@ -333,7 +352,7 @@ export function BookPreview() {
         </span>
         <button
           onClick={goNext}
-          disabled={currentPage >= BOOK_PAGE_IMAGES.length - 1}
+          disabled={currentPage >= BOOK_PAGE_IMAGES.length - 1 || isFlipping || isFirstPage}
           className="px-5 py-2 rounded-full border border-border text-sm font-sans text-foreground hover:bg-white/10 disabled:opacity-30 disabled:cursor-not-allowed transition-all"
         >
           Próxima →

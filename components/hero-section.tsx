@@ -95,7 +95,7 @@ export function HeroSection() {
               transition: "all 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.2s",
             }}
           >
-            Algumas dores não gritam. Elas Chovem.
+            Merry Rains - Algumas pessoas sentem a chuva, outras apenas se molham
           </p>
 
           <h1 className="font-serif">

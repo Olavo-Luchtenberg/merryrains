@@ -9,6 +9,7 @@ const _inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 const _playfair = Playfair_Display({ subsets: ["latin"], variable: "--font-playfair" });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? 'https://merryrains.com'),
   title: 'Merry Rains',
   description: 'Descubra MERRY RAINS, uma aventura epica de fantasia e ficcao cientifica que vai transportar voce para mundos alem da imaginacao.',
   generator: 'v0.app',

@@ -2,7 +2,7 @@
 
 import { useState, Suspense } from "react"
 import { signIn } from "next-auth/react"
-import { useRouter, useSearchParams } from "next/navigation"
+import { useRouter } from "next/navigation"
 import Link from "next/link"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -36,8 +36,6 @@ type LoginForm = z.infer<typeof loginSchema>
 
 function LoginForm() {
   const router = useRouter()
-  const searchParams = useSearchParams()
-  const callbackUrl = searchParams.get("callbackUrl") ?? "/livro"
   const [error, setError] = useState<string | null>(null)
   const [showPassword, setShowPassword] = useState(false)
 
@@ -59,7 +57,7 @@ function LoginForm() {
       return
     }
 
-    router.push(callbackUrl)
+    router.push("/biblioteca")
     router.refresh()
   }
 

@@ -8,6 +8,7 @@ export const authOptions: NextAuthOptions = {
   session: {
     strategy: "jwt",
     maxAge: 30 * 24 * 60 * 60, // 30 dias
+    updateAge: 24 * 60 * 60,   // renova a sessão a cada 24h de uso
   },
   pages: {
     signIn: "/login",
@@ -43,6 +44,11 @@ export const authOptions: NextAuthOptions = {
     }),
   ],
   callbacks: {
+    async redirect({ url, baseUrl }) {
+      if (url.startsWith(baseUrl)) return url
+      if (url.startsWith("/")) return `${baseUrl}${url}`
+      return `${baseUrl}/biblioteca`
+    },
     async jwt({ token, user }) {
       if (user) {
         token.id = user.id
