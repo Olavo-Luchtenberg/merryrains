@@ -76,6 +76,21 @@ pnpm dev
 
 Preço do livro está em R$ 29,90 (ajuste em `app/api/checkout/route.ts` se quiser).
 
+## Kiwify (pagamento)
+
+O checkout redireciona para Kiwify. Para liberar o acesso ao livro automaticamente após o pagamento:
+
+1. Na Kiwify: **Apps** → **Webhooks** → **Criar webhook**
+2. **Produto:** selecione MERRY RAINS (ou "Todos")
+3. **Eventos:** marque `compra_aprovada`
+4. **URL do webhook:** `https://seu-dominio.com/api/webhooks/kiwify`
+5. **Token** (opcional): gere um token e adicione no Vercel como `KIWIFY_WEBHOOK_TOKEN`
+6. Clique em **Criar**
+
+**Importante:** O email do comprador na Kiwify deve ser o mesmo da conta no site. O usuário precisa se cadastrar no site antes de comprar.
+
+**URL de sucesso:** Na configuração do produto na Kiwify, defina a página de redirecionamento após pagamento como `https://seu-dominio.com/biblioteca`.
+
 ## Amanhã: deploy no Railway
 
 1. Crie o projeto no Railway
