@@ -57,7 +57,7 @@ export function BibliotecaContent({ hasPurchase }: { hasPurchase: boolean }) {
           aqui.
         </p>
         <Button asChild>
-          <Link href="/registro?returnTo=/checkout">
+          <Link href="/login?callbackUrl=/checkout">
             <ShoppingBag className="h-4 w-4 mr-2" />
             Comprar MERRY RAINS
           </Link>

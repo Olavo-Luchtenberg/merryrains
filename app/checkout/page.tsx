@@ -2,7 +2,7 @@
 
 import { useSession } from "next-auth/react"
 import { useRouter } from "next/navigation"
-import { useEffect, useState } from "react"
+import { useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import {
   Card,
@@ -12,52 +12,22 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
-import { Loader2, CreditCard } from "lucide-react"
+import { CreditCard } from "lucide-react"
 import Link from "next/link"
 import Image from "next/image"
 
 export default function CheckoutPage() {
   const { data: session, status } = useSession()
   const router = useRouter()
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
     if (status === "unauthenticated") {
-      router.replace("/registro?returnTo=/checkout")
+      router.replace("/login?callbackUrl=/checkout")
     }
   }, [status, router])
 
-  const handleCheckout = async () => {
-    if (!session?.user?.email) return
-    setLoading(true)
-    setError(null)
-
-    try {
-      const res = await fetch("/api/checkout", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({}),
-      })
-
-      const data = await res.json()
-
-      if (!res.ok) {
-        setError(data.error ?? "Erro ao criar sessão de pagamento")
-        setLoading(false)
-        return
-      }
-
-      if (data.url) {
-        window.location.href = data.url
-      } else {
-        setError("URL de pagamento não retornada")
-        setLoading(false)
-      }
-    } catch {
-      setError("Erro ao processar. Tente novamente.")
-      setLoading(false)
-    }
+  const handleCheckout = () => {
+    window.location.href = "https://pay.kiwify.com.br/NFkbaJY"
   }
 
   if (status === "loading" || status === "unauthenticated") {
@@ -106,24 +76,14 @@ export default function CheckoutPage() {
               </p>
             </div>
           </div>
-          {error && (
-            <p className="text-sm text-destructive text-center">{error}</p>
-          )}
         </CardContent>
         <CardFooter className="flex flex-col gap-2">
           <Button
             className="w-full"
             onClick={handleCheckout}
-            disabled={loading}
           >
-            {loading ? (
-              <Loader2 className="h-4 w-4 animate-spin" />
-            ) : (
-              <>
-                <CreditCard className="h-4 w-4 mr-2" />
-                Ir para pagamento
-              </>
-            )}
+            <CreditCard className="h-4 w-4 mr-2" />
+            Ir para pagamento
           </Button>
           <Link
             href="/"

@@ -155,7 +155,7 @@ export function HeroSection() {
             }}
           >
             <a
-              href="#comprar"
+              href="/login?callbackUrl=/checkout"
               className="group relative inline-flex items-center justify-center gap-2 px-8 py-4 text-sm font-semibold tracking-wider uppercase rounded-lg overflow-hidden font-sans"
               style={{ backgroundColor: '#ffffff', color: '#000000' }}
             >

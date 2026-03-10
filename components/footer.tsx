@@ -36,7 +36,7 @@ export function Footer() {
                 Prévia
               </a>
               <a
-                href="#comprar"
+                href="/login?callbackUrl=/checkout"
                 className="text-sm text-muted-foreground hover:text-primary transition-colors font-sans"
               >
                 Comprar

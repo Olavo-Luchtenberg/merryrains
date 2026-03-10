@@ -36,7 +36,7 @@ export default async function LivroLayout({
             </p>
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
               <Button asChild>
-                <Link href="/registro?returnTo=/checkout">Comprar agora</Link>
+                <Link href="/login?callbackUrl=/checkout">Comprar agora</Link>
               </Button>
               <Button variant="outline" asChild>
                 <Link href="/biblioteca">Minha biblioteca</Link>

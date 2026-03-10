@@ -16,7 +16,7 @@ const links: { href: string; label: string; external?: boolean }[] = [
   { href: "#previa", label: "Previa" },
   { href: "#diferencial", label: "Diferencial" },
   { href: "#autor", label: "Autor" },
-  { href: "#comprar", label: "Comprar" },
+  { href: "/login?callbackUrl=/checkout", label: "Comprar", external: true },
   { href: "/login", label: "Entrar", external: true },
 ]
 
