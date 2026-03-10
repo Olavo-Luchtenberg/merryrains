@@ -51,7 +51,7 @@ export default async function LivroLayout({
   return (
     <div className="min-h-screen flex flex-col bg-background">
       <LivroNav />
-      <main className="flex-1">{children}</main>
+      <main className="flex-1 flex flex-col min-h-0">{children}</main>
     </div>
   )
 }

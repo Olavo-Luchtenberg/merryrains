@@ -174,8 +174,42 @@ export function BookPreview() {
     }, 100)
   }
 
-  const goNext = () => bookRef.current?.pageFlip()?.flipNext()
-  const goPrev = () => bookRef.current?.pageFlip()?.flipPrev()
+  const goNext = useCallback(() => bookRef.current?.pageFlip()?.flipNext(), [])
+  const goPrev = useCallback(() => bookRef.current?.pageFlip()?.flipPrev(), [])
+
+  // Navegação: setas, WASD (A/← anterior, D/→/W/espaço próxima), scroll do mouse
+  useEffect(() => {
+    if (!opened) return
+    const onKeyDown = (e: KeyboardEvent) => {
+      const target = e.target as HTMLElement
+      if (target.tagName === "INPUT" || target.tagName === "TEXTAREA") return
+      const prevKeys = ["ArrowLeft", "KeyA", "KeyS"]
+      const nextKeys = ["ArrowRight", "KeyD", "KeyW", "Space"]
+      if (prevKeys.includes(e.code)) {
+        e.preventDefault()
+        goPrev()
+      } else if (nextKeys.includes(e.code)) {
+        e.preventDefault()
+        goNext()
+      }
+    }
+    window.addEventListener("keydown", onKeyDown)
+    return () => window.removeEventListener("keydown", onKeyDown)
+  }, [opened, goPrev, goNext])
+
+  // Scroll do mouse: precisa passive: false para preventDefault
+  useEffect(() => {
+    if (!opened) return
+    const el = containerRef.current
+    if (!el) return
+    const handleWheel = (e: WheelEvent) => {
+      e.preventDefault()
+      if (e.deltaY > 0) goNext()
+      else if (e.deltaY < 0) goPrev()
+    }
+    el.addEventListener("wheel", handleWheel, { passive: false })
+    return () => el.removeEventListener("wheel", handleWheel)
+  }, [opened, goPrev, goNext])
 
   if (!mounted) {
     return (
@@ -306,6 +340,9 @@ export function BookPreview() {
         </button>
       </div>
 
+      <p className="text-muted-foreground text-[10px] text-center">
+        Scroll · Setas · WASD · Espaço
+      </p>
       <button
         onClick={() => {
           if (isFullscreen) document.exitFullscreen().catch(() => {})
