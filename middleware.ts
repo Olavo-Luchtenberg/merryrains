@@ -11,9 +11,11 @@ export async function middleware(req: NextRequest) {
 
   const path = req.nextUrl.pathname
 
-  // Se logado, vai direto para a biblioteca (home ou login)
+  // Se logado em / ou /login, redireciona (respeitando callbackUrl para /checkout)
   if (token && (path === "/" || path === "/login")) {
-    return NextResponse.redirect(new URL("/biblioteca", req.url))
+    const callbackUrl = req.nextUrl.searchParams.get("callbackUrl")
+    const target = callbackUrl === "/checkout" ? "/checkout" : "/biblioteca"
+    return NextResponse.redirect(new URL(target, req.url))
   }
 
   // Protege /livro, /biblioteca e /conta
