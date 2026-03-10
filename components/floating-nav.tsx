@@ -105,10 +105,11 @@ export function FloatingNav() {
         <div className="flex items-center gap-1 px-2 py-2 rounded-full border border-border bg-card/80 backdrop-blur-xl shadow-lg">
           <button
             type="button"
-            className="px-4 py-2 text-xs font-bold tracking-wider text-primary font-serif hover:opacity-80 transition-opacity"
+            className="flex items-center hover:opacity-80 transition-opacity"
             onClick={() => setHasChosen(false)}
+            aria-label="Página inicial"
           >
-            MR
+            <span className="text-sm font-semibold tracking-wider text-foreground">Merry Rains</span>
           </button>
           <div className="w-px h-4 bg-border" aria-hidden="true" />
           <button
@@ -148,10 +149,11 @@ export function FloatingNav() {
       <div className="fixed left-4 right-4 md:hidden z-40 flex justify-between items-center px-2 py-2 rounded-2xl mx-2 border border-border/50 bg-card/60 backdrop-blur-xl" style={{ top: 'max(1rem, env(safe-area-inset-top))' }}>
         <button
           type="button"
-          className="px-4 py-2 text-sm font-bold tracking-wider text-primary font-serif"
+          className="flex items-center hover:opacity-80 transition-opacity"
           onClick={() => setHasChosen(false)}
+          aria-label="Página inicial"
         >
-          MR
+          <span className="text-sm font-semibold tracking-wider text-foreground">Merry Rains</span>
         </button>
         <Sheet open={sheetOpen} onOpenChange={setSheetOpen}>
           <SheetTrigger asChild>

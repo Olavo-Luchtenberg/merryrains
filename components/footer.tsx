@@ -13,9 +13,7 @@ export function Footer() {
         <ScrollReveal>
           <div className="flex flex-col md:flex-row items-center justify-between gap-6 sm:gap-8">
             <div className="text-center md:text-left">
-              <h3 className="text-2xl font-bold font-serif text-foreground">
-                MERRY <span className="text-primary">RAINS</span>
-              </h3>
+              <p className="font-serif font-bold text-xl text-foreground">Merry Rains</p>
               <p className="mt-2 text-sm text-muted-foreground font-sans">
                 Uma jornada alem da imaginacao
               </p>

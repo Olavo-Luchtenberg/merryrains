@@ -9,25 +9,12 @@ const _inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 const _playfair = Playfair_Display({ subsets: ["latin"], variable: "--font-playfair" });
 
 export const metadata: Metadata = {
-  title: 'MERRY RAINS - Uma Jornada Alem da Imaginacao',
+  title: 'Merry Rains',
   description: 'Descubra MERRY RAINS, uma aventura epica de fantasia e ficcao cientifica que vai transportar voce para mundos alem da imaginacao.',
   generator: 'v0.app',
   icons: {
-    icon: [
-      {
-        url: '/icon-light-32x32.png',
-        media: '(prefers-color-scheme: light)',
-      },
-      {
-        url: '/icon-dark-32x32.png',
-        media: '(prefers-color-scheme: dark)',
-      },
-      {
-        url: '/icon.svg',
-        type: 'image/svg+xml',
-      },
-    ],
-    apple: '/apple-icon.png',
+    icon: '/favicon.png',
+    apple: '/favicon.png',
   },
 }
 
