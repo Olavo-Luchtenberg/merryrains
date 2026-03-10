@@ -1,8 +1,8 @@
 "use client"
 
-import { useState, Suspense } from "react"
+import { useState, useEffect, Suspense } from "react"
 import { signIn } from "next-auth/react"
-import { useRouter } from "next/navigation"
+import { useRouter, useSearchParams } from "next/navigation"
 import Link from "next/link"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -36,8 +36,16 @@ type LoginForm = z.infer<typeof loginSchema>
 
 function LoginForm() {
   const router = useRouter()
+  const searchParams = useSearchParams()
   const [error, setError] = useState<string | null>(null)
+  const [success, setSuccess] = useState<string | null>(null)
   const [showPassword, setShowPassword] = useState(false)
+
+  useEffect(() => {
+    if (searchParams.get("reset") === "1") {
+      setSuccess("Senha alterada! Faça login com sua nova senha.")
+    }
+  }, [searchParams])
 
   const form = useForm<LoginForm>({
     resolver: zodResolver(loginSchema),
@@ -75,6 +83,9 @@ function LoginForm() {
             <CardContent className="space-y-4">
               {error && (
                 <p className="text-sm text-destructive text-center">{error}</p>
+              )}
+              {success && (
+                <p className="text-sm text-green-600 dark:text-green-400 text-center">{success}</p>
               )}
               <FormField
                 control={form.control}
@@ -124,14 +135,24 @@ function LoginForm() {
                   </FormItem>
                 )}
               />
-              <div className="text-center text-sm text-muted-foreground">
-                Não tem conta?{" "}
-                <Link
-                  href="/registro"
-                  className="text-primary hover:underline font-medium"
-                >
-                  Cadastre-se
-                </Link>
+              <div className="text-center text-sm text-muted-foreground space-y-2">
+                <p>
+                  Não tem conta?{" "}
+                  <Link
+                    href="/registro"
+                    className="text-primary hover:underline font-medium"
+                  >
+                    Cadastre-se
+                  </Link>
+                </p>
+                <p>
+                  <Link
+                    href="/esqueci-senha"
+                    className="text-primary hover:underline font-medium"
+                  >
+                    Esqueci a senha
+                  </Link>
+                </p>
               </div>
             </CardContent>
             <CardFooter>

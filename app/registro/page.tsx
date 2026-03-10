@@ -43,7 +43,7 @@ const registerSchema = z
       const d = new Date(v)
       if (isNaN(d.getTime())) return false
       return is18Plus(d)
-    }, "Você precisa ter 18 anos ou mais para comprar"),
+    }, "Idade mínima: 18 anos"),
     email: z.string().email("Email inválido"),
     password: z.string().min(6, "Senha deve ter pelo menos 6 caracteres"),
     confirmPassword: z.string(),
@@ -112,7 +112,7 @@ function RegistroForm() {
         <CardHeader className="text-center">
           <CardTitle className="font-serif text-2xl">Cadastre-se</CardTitle>
           <CardDescription>
-            Livro +18. Crie sua conta para acessar o livro após a compra
+            Conteúdo para maiores de 18 anos. Crie sua conta para acessar o livro após a compra.
           </CardDescription>
         </CardHeader>
         <Form {...form}>
@@ -161,7 +161,7 @@ function RegistroForm() {
                 name="birthDate"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Data de nascimento (obrigatório – livro +18)</FormLabel>
+                    <FormLabel>Data de nascimento</FormLabel>
                     <FormControl>
                       <Input
                         type="date"
@@ -170,11 +170,6 @@ function RegistroForm() {
                         {...field}
                       />
                     </FormControl>
-                    {isUnder18 && (
-                      <p className="text-sm text-destructive">
-                        Você precisa ter 18 anos ou mais para se cadastrar e comprar o livro.
-                      </p>
-                    )}
                     <FormMessage />
                   </FormItem>
                 )}

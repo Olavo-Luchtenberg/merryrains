@@ -16,8 +16,8 @@ export async function middleware(req: NextRequest) {
     return NextResponse.redirect(new URL("/biblioteca", req.url))
   }
 
-  // Protege /livro e /biblioteca
-  if ((path.startsWith("/livro") || path.startsWith("/biblioteca")) && !token) {
+  // Protege /livro, /biblioteca e /conta
+  if ((path.startsWith("/livro") || path.startsWith("/biblioteca") || path.startsWith("/conta")) && !token) {
     const signIn = new URL("/login", req.url)
     signIn.searchParams.set("callbackUrl", path)
     return NextResponse.redirect(signIn)
@@ -27,5 +27,5 @@ export async function middleware(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/", "/login", "/livro/:path*", "/biblioteca/:path*"],
+  matcher: ["/", "/login", "/livro/:path*", "/biblioteca/:path*", "/conta"],
 }
