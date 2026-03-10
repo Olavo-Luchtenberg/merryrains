@@ -63,8 +63,14 @@ function RegistroForm() {
   const [showPassword, setShowPassword] = useState(false)
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
 
+  const birthDate = form.watch("birthDate")
+  const isUnder18 = birthDate
+    ? !is18Plus(new Date(birthDate))
+    : false
+
   const form = useForm<RegisterForm>({
     resolver: zodResolver(registerSchema),
+    mode: "onChange", // valida ao preencher para dar feedback imediato
     defaultValues: {
       name: "",
       cpf: "",
@@ -155,14 +161,20 @@ function RegistroForm() {
                 name="birthDate"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Data de nascimento</FormLabel>
+                    <FormLabel>Data de nascimento (obrigatório – livro +18)</FormLabel>
                     <FormControl>
                       <Input
                         type="date"
                         autoComplete="bday"
+                        max={new Date().toISOString().split("T")[0]}
                         {...field}
                       />
                     </FormControl>
+                    {isUnder18 && (
+                      <p className="text-sm text-destructive">
+                        Você precisa ter 18 anos ou mais para se cadastrar e comprar o livro.
+                      </p>
+                    )}
                     <FormMessage />
                   </FormItem>
                 )}
@@ -259,7 +271,7 @@ function RegistroForm() {
               <Button
                 type="submit"
                 className="w-full"
-                disabled={form.formState.isSubmitting}
+                disabled={form.formState.isSubmitting || isUnder18}
               >
                 {form.formState.isSubmitting ? (
                   <Loader2 className="h-4 w-4 animate-spin" />
