@@ -12,7 +12,9 @@ datasource db {
 
 model User {
   id            String    @id @default(cuid())
-  name          String?
+  name          String?   // nome completo
+  cpf           String?
+  birthDate     DateTime?
   email         String    @unique
   emailVerified DateTime?
   password      String?

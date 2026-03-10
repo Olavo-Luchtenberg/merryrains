@@ -25,10 +25,25 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 import { Loader2, Eye, EyeOff } from "lucide-react"
+import { formatCPF, isValidCPF } from "@/lib/cpf"
+
+function is18Plus(date: Date): boolean {
+  const today = new Date()
+  let age = today.getFullYear() - date.getFullYear()
+  const m = today.getMonth() - date.getMonth()
+  if (m < 0 || (m === 0 && today.getDate() < date.getDate())) age--
+  return age >= 18
+}
 
 const registerSchema = z
   .object({
-    name: z.string().min(2, "Nome deve ter pelo menos 2 caracteres"),
+    name: z.string().min(4, "Nome completo deve ter pelo menos 4 caracteres"),
+    cpf: z.string().refine((v) => isValidCPF(v), "CPF inválido"),
+    birthDate: z.string().refine((v) => {
+      const d = new Date(v)
+      if (isNaN(d.getTime())) return false
+      return is18Plus(d)
+    }, "Você precisa ter 18 anos ou mais para comprar"),
     email: z.string().email("Email inválido"),
     password: z.string().min(6, "Senha deve ter pelo menos 6 caracteres"),
     confirmPassword: z.string(),
@@ -52,6 +67,8 @@ function RegistroForm() {
     resolver: zodResolver(registerSchema),
     defaultValues: {
       name: "",
+      cpf: "",
+      birthDate: "",
       email: "",
       password: "",
       confirmPassword: "",
@@ -65,6 +82,8 @@ function RegistroForm() {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         name: data.name,
+        cpf: data.cpf,
+        birthDate: data.birthDate,
         email: data.email,
         password: data.password,
       }),
@@ -87,7 +106,7 @@ function RegistroForm() {
         <CardHeader className="text-center">
           <CardTitle className="font-serif text-2xl">Cadastre-se</CardTitle>
           <CardDescription>
-            Crie sua conta para acessar o livro após a compra
+            Livro +18. Crie sua conta para acessar o livro após a compra
           </CardDescription>
         </CardHeader>
         <Form {...form}>
@@ -101,11 +120,46 @@ function RegistroForm() {
                 name="name"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Nome</FormLabel>
+                    <FormLabel>Nome completo</FormLabel>
                     <FormControl>
                       <Input
-                        placeholder="Seu nome"
+                        placeholder="Nome e sobrenome"
                         autoComplete="name"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="cpf"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>CPF</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="000.000.000-00"
+                        maxLength={14}
+                        {...field}
+                        onChange={(e) => field.onChange(formatCPF(e.target.value))}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="birthDate"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Data de nascimento</FormLabel>
+                    <FormControl>
+                      <Input
+                        type="date"
+                        autoComplete="bday"
                         {...field}
                       />
                     </FormControl>

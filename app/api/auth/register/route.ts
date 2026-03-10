@@ -3,8 +3,24 @@ import { prisma } from "@/lib/prisma"
 import bcrypt from "bcryptjs"
 import { z } from "zod"
 
+import { isValidCPF, unformatCPF } from "@/lib/cpf"
+
+function is18Plus(birthDate: Date): boolean {
+  const today = new Date()
+  let age = today.getFullYear() - birthDate.getFullYear()
+  const m = today.getMonth() - birthDate.getMonth()
+  if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) age--
+  return age >= 18
+}
+
 const registerSchema = z.object({
-  name: z.string().min(2, "Nome deve ter pelo menos 2 caracteres"),
+  name: z.string().min(4, "Nome completo deve ter pelo menos 4 caracteres"),
+  cpf: z.string().refine((v) => isValidCPF(v), "CPF inválido"),
+  birthDate: z.string().refine((v) => {
+    const d = new Date(v)
+    if (isNaN(d.getTime())) return false
+    return is18Plus(d)
+  }, "Você precisa ter 18 anos ou mais para comprar"),
   email: z.string().email("Email inválido"),
   password: z.string().min(6, "Senha deve ter pelo menos 6 caracteres"),
 })
@@ -20,7 +36,7 @@ export async function POST(req: Request) {
       )
     }
 
-    const { name, email, password } = parsed.data
+    const { name, cpf, birthDate, email, password } = parsed.data
 
     const existing = await prisma.user.findUnique({ where: { email } })
     if (existing) {
@@ -35,6 +51,8 @@ export async function POST(req: Request) {
     await prisma.user.create({
       data: {
         name,
+        cpf: unformatCPF(cpf),
+        birthDate: new Date(birthDate),
         email,
         password: hashedPassword,
       },
