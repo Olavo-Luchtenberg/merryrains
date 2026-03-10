@@ -1,5 +1,6 @@
 "use client"
 
+import Link from "next/link"
 import { ScrollReveal } from "./scroll-reveal"
 import { useSoundtrack } from "@/lib/soundtrack-context"
 import { Instagram } from "lucide-react"
@@ -57,8 +58,19 @@ export function Footer() {
             </div>
           </div>
 
-          <div className="mt-8 sm:mt-12 pt-6 sm:pt-8 border-t border-border text-center">
-            <p className="text-xs text-muted-foreground font-sans">
+          <div className="mt-8 sm:mt-12 pt-6 sm:pt-8 border-t border-border">
+            <div className="flex flex-wrap justify-center gap-x-4 gap-y-1 text-xs text-muted-foreground mb-4">
+              <Link href="/privacidade" className="hover:text-primary transition-colors">Privacidade</Link>
+              <Link href="/cookies" className="hover:text-primary transition-colors">Cookies</Link>
+              <Link href="/termos" className="hover:text-primary transition-colors">Termos</Link>
+              <Link href="/reembolso" className="hover:text-primary transition-colors">Reembolso</Link>
+              <Link href="/entrega" className="hover:text-primary transition-colors">Entrega</Link>
+              <Link href="/anti-pirataria" className="hover:text-primary transition-colors">Anti-pirataria</Link>
+              <Link href="/disclaimer" className="hover:text-primary transition-colors">Disclaimer</Link>
+              <Link href="/faq-juridico" className="hover:text-primary transition-colors">FAQ Jurídico</Link>
+              <Link href="/acessibilidade" className="hover:text-primary transition-colors">Acessibilidade</Link>
+            </div>
+            <p className="text-xs text-muted-foreground font-sans text-center">
               MERRY RAINS. Todos os direitos reservados.
             </p>
           </div>
