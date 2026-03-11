@@ -2,7 +2,7 @@
 
 import React, { useRef, useState, useEffect, useCallback } from "react"
 import HTMLFlipBook from "react-pageflip"
-import { BOOK_PAGE_IMAGES } from "@/lib/book-pages"
+import { PREVIEW_PAGE_IMAGES } from "@/lib/book-pages"
 
 // Ícones inline para fullscreen
 function IconExpand() {
@@ -251,7 +251,7 @@ export function BookPreview() {
           aria-label="Abrir prévia do livro"
         >
           <img
-            src={BOOK_PAGE_IMAGES[0]}
+            src={PREVIEW_PAGE_IMAGES[0]}
             alt="Capa do livro Merry Rains"
             className="w-full h-full object-cover"
             draggable={false}
@@ -320,7 +320,7 @@ export function BookPreview() {
           onFlip={handleFlip}
           startPage={currentPage}
         >
-          {BOOK_PAGE_IMAGES.map((src, i) => (
+          {PREVIEW_PAGE_IMAGES.map((src, i) => (
             <div
               key={i}
               className="book-page-wrapper w-full h-full overflow-hidden bg-[#1a1a1a]"
@@ -348,11 +348,11 @@ export function BookPreview() {
         <span className="text-muted-foreground text-xs font-sans tabular-nums">
           {currentPage === 0
             ? "Capa"
-            : `${currentPage} / ${BOOK_PAGE_IMAGES.length - 1}`}
+            : `${currentPage} / ${PREVIEW_PAGE_IMAGES.length - 1}`}
         </span>
         <button
           onClick={goNext}
-          disabled={currentPage >= BOOK_PAGE_IMAGES.length - 1 || isFlipping || isFirstPage}
+          disabled={currentPage >= PREVIEW_PAGE_IMAGES.length - 1 || isFlipping || isFirstPage}
           className="px-5 py-2 rounded-full border border-border text-sm font-sans text-foreground hover:bg-white/10 disabled:opacity-30 disabled:cursor-not-allowed transition-all"
         >
           Próxima →

@@ -22,9 +22,10 @@ model User {
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
 
-  accounts Account[]
-  sessions Session[]
-  purchase Purchase?
+  accounts        Account[]
+  sessions        Session[]
+  purchase        Purchase?
+  chapterProgress ChapterProgress[]
 }
 
 model Account {
@@ -81,4 +82,17 @@ model Purchase {
   paymentId String?
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+// Progresso de leitura por capítulo
+model ChapterProgress {
+  id         String   @id @default(cuid())
+  userId     String
+  chapterId  Int
+  lastPage   Int      // índice da última página lida (0-based)
+  updatedAt  DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, chapterId])
 }

@@ -1,18 +1,39 @@
 "use client"
 
 import React, { useRef, useState, useEffect, useCallback } from "react"
+import Link from "next/link"
 import HTMLFlipBook from "react-pageflip"
 import { ChevronLeft, ChevronRight, Maximize2, Minimize2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { BOOK_PAGE_IMAGES, TOTAL_BOOK_PAGES } from "@/lib/book-pages"
+import { getChapterForPage } from "@/lib/chapters"
 
-export function BookReader() {
+interface BookReaderProps {
+  initialPage?: number
+}
+
+const saveProgressDebounceMs = 800
+let saveTimeout: ReturnType<typeof setTimeout> | null = null
+
+function saveProgress(chapterId: number, lastPage: number) {
+  if (saveTimeout) clearTimeout(saveTimeout)
+  saveTimeout = setTimeout(() => {
+    fetch("/api/reading-progress", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ chapterId, lastPage }),
+    }).catch(() => {})
+    saveTimeout = null
+  }, saveProgressDebounceMs)
+}
+
+export function BookReader({ initialPage = 1 }: BookReaderProps) {
   const bookRef = useRef<HTMLFlipBook>(null)
   const containerRef = useRef<HTMLDivElement>(null)
   const fullscreenRef = useRef<HTMLDivElement>(null)
   const [pageWidth, setPageWidth] = useState(400)
   const [pageHeight, setPageHeight] = useState(560)
-  const [currentPage, setCurrentPage] = useState(1)
+  const [currentPage, setCurrentPage] = useState(initialPage)
   const [mounted, setMounted] = useState(false)
   const [isFullscreen, setIsFullscreen] = useState(false)
 
@@ -91,7 +112,13 @@ export function BookReader() {
   }, [isFullscreen, calcFullscreenSize])
 
   const handleFlip = useCallback((e: { data: number }) => {
-    setCurrentPage(e.data)
+    const page = e.data
+    setCurrentPage(page)
+    const pageIndex = page - 1
+    const chapter = getChapterForPage(pageIndex)
+    if (chapter) {
+      saveProgress(chapter.id, pageIndex)
+    }
   }, [])
 
   const goPrev = () => bookRef.current?.pageFlip()?.flipPrev()
@@ -204,9 +231,17 @@ export function BookReader() {
         </Button>
       </div>
 
-      <p className="text-xs text-muted-foreground">
-        Use as setas do teclado para virar as páginas
-      </p>
+      <div className="flex flex-col items-center gap-2">
+        <p className="text-xs text-muted-foreground">
+          Use as setas do teclado para virar as páginas
+        </p>
+        <Link
+          href="/livro"
+          className="text-xs text-primary hover:underline"
+        >
+          Escolher outro capítulo
+        </Link>
+      </div>
     </div>
   )
 }
