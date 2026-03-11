@@ -16,10 +16,10 @@ function LivroContent() {
     ? CHAPTERS.find((ch) => ch.id === chapterId)
     : null
 
-  // Se tem capítulo válido, mostra o leitor
+  // Se tem capítulo válido, mostra o leitor (apenas páginas desse capítulo)
   if (chapter) {
     return (
-      <BookReader initialPage={chapter.startPage + 1} />
+      <BookReader chapter={chapter} />
     )
   }
 

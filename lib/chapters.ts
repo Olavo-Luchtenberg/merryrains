@@ -1,5 +1,3 @@
-import { TOTAL_BOOK_PAGES } from "./book-pages"
-
 export interface Chapter {
   id: number
   title: string
@@ -7,9 +5,10 @@ export interface Chapter {
   endPage: number   // 0-based, inclusive
 }
 
-// Capítulo 6 - único capítulo no momento
+// Capítulo 6 (70 pág.) + Capítulo 7 (104 pág.)
 export const CHAPTERS: Chapter[] = [
-  { id: 6, title: "Capítulo 6", startPage: 0, endPage: TOTAL_BOOK_PAGES - 1 },
+  { id: 6, title: "Capítulo 6", startPage: 0, endPage: 69 },
+  { id: 7, title: "Capítulo 7", startPage: 70, endPage: 173 },
 ]
 
 export function getChapterByIndex(index: number): Chapter | undefined {

@@ -1,15 +1,15 @@
 "use client"
 
-import React, { useRef, useState, useEffect, useCallback } from "react"
+import React, { useRef, useState, useEffect, useCallback, useMemo } from "react"
 import Link from "next/link"
 import HTMLFlipBook from "react-pageflip"
 import { ChevronLeft, ChevronRight, Maximize2, Minimize2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { BOOK_PAGE_IMAGES, TOTAL_BOOK_PAGES } from "@/lib/book-pages"
-import { getChapterForPage } from "@/lib/chapters"
+import { BOOK_PAGE_IMAGES } from "@/lib/book-pages"
+import type { Chapter } from "@/lib/chapters"
 
 interface BookReaderProps {
-  initialPage?: number
+  chapter: Chapter
 }
 
 const saveProgressDebounceMs = 800
@@ -27,34 +27,40 @@ function saveProgress(chapterId: number, lastPage: number) {
   }, saveProgressDebounceMs)
 }
 
-export function BookReader({ initialPage = 1 }: BookReaderProps) {
+export function BookReader({ chapter }: BookReaderProps) {
   const bookRef = useRef<HTMLFlipBook>(null)
   const containerRef = useRef<HTMLDivElement>(null)
   const fullscreenRef = useRef<HTMLDivElement>(null)
   const [pageWidth, setPageWidth] = useState(400)
   const [pageHeight, setPageHeight] = useState(560)
-  const [currentPage, setCurrentPage] = useState(initialPage)
+  const [currentPage, setCurrentPage] = useState(1)
   const [mounted, setMounted] = useState(false)
   const [isFullscreen, setIsFullscreen] = useState(false)
 
+  // Apenas as páginas deste capítulo
+  const pageImages = useMemo(
+    () => BOOK_PAGE_IMAGES.slice(chapter.startPage, chapter.endPage + 1),
+    [chapter]
+  )
+  const totalPages = pageImages.length
+
   useEffect(() => setMounted(true), [])
 
-  // Calcula dimensões para preencher o viewport (duas páginas lado a lado)
+  // Calcula dimensões para caber na tela sem scroll (85% do espaço disponível)
   const calcSize = useCallback(() => {
     const vw = window.innerWidth
     const vh = window.innerHeight
     const navH = 56
-    const controlsH = 64
-    const availH = vh - navH - controlsH - 24
-    const availW = vw - 32
+    const extraH = 180 // título + controles + textos + gaps
+    const availH = (vh - navH - extraH) * 0.85
+    const availW = (vw - 48) * 0.9 // margens laterais
 
-    // Duas páginas lado a lado: largura total = 2 * pageWidth
     const ratio = 400 / 560
-    let h = availH
-    let w = Math.round(h * ratio)
-    if (w * 2 > availW) {
-      w = Math.floor(availW / 2)
-      h = Math.round(w / ratio)
+    let w = Math.floor(availW / 2) // duas páginas lado a lado
+    let h = Math.round(w / ratio)
+    if (h > availH) {
+      h = Math.floor(availH)
+      w = Math.round(h * ratio)
     }
     setPageWidth(w)
     setPageHeight(h)
@@ -64,16 +70,16 @@ export function BookReader({ initialPage = 1 }: BookReaderProps) {
   const calcFullscreenSize = useCallback(() => {
     const vw = window.innerWidth
     const vh = window.innerHeight
-    const controlsH = 72
-    const availH = vh - controlsH
-    const availW = vw - 24
+    const extraH = 80
+    const availH = (vh - extraH) * 0.95
+    const availW = (vw - 32) * 0.95
 
     const ratio = 400 / 560
-    let h = availH
-    let w = Math.round(h * ratio)
-    if (w * 2 > availW) {
-      w = Math.floor(availW / 2)
-      h = Math.round(w / ratio)
+    let w = Math.floor(availW / 2)
+    let h = Math.round(w / ratio)
+    if (h > availH) {
+      h = Math.floor(availH)
+      w = Math.round(h * ratio)
     }
     setPageWidth(w)
     setPageHeight(h)
@@ -111,27 +117,64 @@ export function BookReader({ initialPage = 1 }: BookReaderProps) {
     }
   }, [isFullscreen, calcFullscreenSize])
 
-  const handleFlip = useCallback((e: { data: number }) => {
-    const page = e.data
-    setCurrentPage(page)
-    const pageIndex = page - 1
-    const chapter = getChapterForPage(pageIndex)
-    if (chapter) {
-      saveProgress(chapter.id, pageIndex)
-    }
-  }, [])
+  const handleFlip = useCallback(
+    (e: { data: number }) => {
+      const localPage = e.data
+      setCurrentPage(localPage)
+      const globalPageIndex = chapter.startPage + (localPage - 1)
+      saveProgress(chapter.id, globalPageIndex)
+    },
+    [chapter]
+  )
 
-  const goPrev = () => bookRef.current?.pageFlip()?.flipPrev()
-  const goNext = () => bookRef.current?.pageFlip()?.flipNext()
+  const goPrev = useCallback(() => {
+    if (currentPage <= 1) return
+    bookRef.current?.pageFlip()?.flipPrev()
+  }, [currentPage])
 
+  const goNext = useCallback(() => {
+    if (currentPage >= totalPages) return
+    bookRef.current?.pageFlip()?.flipNext()
+  }, [currentPage, totalPages])
+
+  // Teclado: setas e WASD (A/W = anterior, D/S = próxima)
   useEffect(() => {
     const onKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "ArrowLeft") goPrev()
-      if (e.key === "ArrowRight") goNext()
+      const isPrev = e.key === "ArrowLeft" || e.key === "a" || e.key === "A" || e.key === "w" || e.key === "W"
+      const isNext = e.key === "ArrowRight" || e.key === "d" || e.key === "D" || e.key === "s" || e.key === "S"
+      if (isPrev) {
+        e.preventDefault()
+        e.stopPropagation()
+        goPrev()
+      } else if (isNext) {
+        e.preventDefault()
+        e.stopPropagation()
+        goNext()
+      }
     }
     window.addEventListener("keydown", onKeyDown)
     return () => window.removeEventListener("keydown", onKeyDown)
-  }, [])
+  }, [goPrev, goNext])
+
+  // Scroll do mouse para virar páginas (throttle para 1 página por gesto)
+  const lastWheelRef = useRef(0)
+  useEffect(() => {
+    const onWheel = (e: WheelEvent) => {
+      const now = Date.now()
+      if (now - lastWheelRef.current < 600) return // espera animação da página
+      if (e.deltaY > 20) {
+        e.preventDefault()
+        lastWheelRef.current = now
+        goNext()
+      } else if (e.deltaY < -20) {
+        e.preventDefault()
+        lastWheelRef.current = now
+        goPrev()
+      }
+    }
+    window.addEventListener("wheel", onWheel, { passive: false })
+    return () => window.removeEventListener("wheel", onWheel)
+  }, [goPrev, goNext])
 
   if (!mounted) {
     return (
@@ -144,8 +187,8 @@ export function BookReader({ initialPage = 1 }: BookReaderProps) {
   return (
     <div
       ref={fullscreenRef}
-      className={`relative flex flex-col items-center justify-center gap-4 ${
-        isFullscreen ? "fixed inset-0 z-[9999] bg-black" : "flex-1 min-h-0 py-4"
+      className={`relative flex flex-col items-center justify-center gap-3 overflow-hidden ${
+        isFullscreen ? "fixed inset-0 z-[9999] bg-black" : "flex-1 min-h-0 py-3 px-2"
       }`}
     >
       {/* Botão tela cheia */}
@@ -167,7 +210,7 @@ export function BookReader({ initialPage = 1 }: BookReaderProps) {
         style={{ width: pageWidth * 2, height: pageHeight, flexShrink: 0 }}
       >
         <HTMLFlipBook
-          key={`reader-${isFullscreen ? "fs" : "normal"}-${pageWidth}-${pageHeight}`}
+          key={`reader-${chapter.id}-${isFullscreen ? "fs" : "normal"}-${pageWidth}-${pageHeight}`}
           ref={bookRef}
           width={pageWidth}
           height={pageHeight}
@@ -186,9 +229,9 @@ export function BookReader({ initialPage = 1 }: BookReaderProps) {
           drawShadow
           className="flipbook"
           onFlip={handleFlip}
-          startPage={currentPage}
+          startPage={1}
         >
-          {BOOK_PAGE_IMAGES.map((src, i) => (
+          {pageImages.map((src, i) => (
             <div
               key={i}
               className="book-page-wrapper w-full h-full overflow-hidden bg-[#1a1a1a]"
@@ -196,7 +239,7 @@ export function BookReader({ initialPage = 1 }: BookReaderProps) {
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={src}
-                alt={`Página ${i + 1}`}
+                alt={`Página ${i + 1} - ${chapter.title}`}
                 className="w-full h-full object-contain object-center"
                 draggable={false}
                 onContextMenu={(e) => e.preventDefault()}
@@ -206,7 +249,8 @@ export function BookReader({ initialPage = 1 }: BookReaderProps) {
         </HTMLFlipBook>
       </div>
 
-      {/* Controles */}
+      {/* Título do capítulo e controles */}
+      <p className="text-sm font-medium text-muted-foreground">{chapter.title}</p>
       <div className="flex items-center gap-4">
         <Button
           variant="outline"
@@ -218,13 +262,13 @@ export function BookReader({ initialPage = 1 }: BookReaderProps) {
           <ChevronLeft className="h-5 w-5" />
         </Button>
         <span className="text-muted-foreground text-sm tabular-nums min-w-[100px] text-center">
-          Página {currentPage} de {TOTAL_BOOK_PAGES}
+          Página {currentPage} de {totalPages}
         </span>
         <Button
           variant="outline"
           size="icon"
           onClick={goNext}
-          disabled={currentPage >= TOTAL_BOOK_PAGES}
+          disabled={currentPage >= totalPages}
           className="rounded-full"
         >
           <ChevronRight className="h-5 w-5" />
@@ -233,7 +277,7 @@ export function BookReader({ initialPage = 1 }: BookReaderProps) {
 
       <div className="flex flex-col items-center gap-2">
         <p className="text-xs text-muted-foreground">
-          Use as setas do teclado para virar as páginas
+          Setas, WASD ou scroll do mouse para virar
         </p>
         <Link
           href="/livro"
