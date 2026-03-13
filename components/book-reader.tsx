@@ -8,6 +8,27 @@ import { Button } from "@/components/ui/button"
 import { BOOK_PAGE_IMAGES } from "@/lib/book-pages"
 import type { Chapter } from "@/lib/chapters"
 
+const PAGE_RATIO = 400 / 560
+
+function isMobile(): boolean {
+  if (typeof window === "undefined") return false
+  return window.innerWidth < 768 || /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
+}
+
+function lockLandscape(): void {
+  try {
+    const o = (screen as { orientation?: { lock?: (mode: string) => Promise<void> } }).orientation
+    if (o?.lock) o.lock("landscape").catch(() => {})
+  } catch { /* ignore */ }
+}
+
+function unlockOrientation(): void {
+  try {
+    const o = (screen as { orientation?: { unlock?: () => void } }).orientation
+    if (o?.unlock) o.unlock()
+  } catch { /* ignore */ }
+}
+
 interface BookReaderProps {
   chapter: Chapter
 }
@@ -67,19 +88,21 @@ export function BookReader({ chapter }: BookReaderProps) {
   }, [])
 
   // Em fullscreen: ocupa toda a tela
+  // Mobile: otimizado para landscape, duas páginas lado a lado, sem cortes
   const calcFullscreenSize = useCallback(() => {
     const vw = window.innerWidth
     const vh = window.innerHeight
-    const extraH = 80
-    const availH = (vh - extraH) * 0.95
-    const availW = (vw - 32) * 0.95
+    const mobile = isMobile()
+    const extraH = mobile ? 120 : 80
+    const availH = vh - extraH
+    const availW = vw - (mobile ? 8 : 32)
 
-    const ratio = 400 / 560
+    // Duas páginas lado a lado: escala para caber na tela
     let w = Math.floor(availW / 2)
-    let h = Math.round(w / ratio)
+    let h = Math.round(w / PAGE_RATIO)
     if (h > availH) {
       h = Math.floor(availH)
-      w = Math.round(h * ratio)
+      w = Math.round(h * PAGE_RATIO)
     }
     setPageWidth(w)
     setPageHeight(h)
@@ -97,8 +120,13 @@ export function BookReader({ chapter }: BookReaderProps) {
     const onFsChange = () => {
       const isFull = !!document.fullscreenElement
       setIsFullscreen(isFull)
-      if (isFull) calcFullscreenSize()
-      else calcSize()
+      if (isFull) {
+        if (isMobile()) lockLandscape()
+        calcFullscreenSize()
+      } else {
+        if (isMobile()) unlockOrientation()
+        calcSize()
+      }
     }
     document.addEventListener("fullscreenchange", onFsChange)
     return () => document.removeEventListener("fullscreenchange", onFsChange)
@@ -108,10 +136,12 @@ export function BookReader({ chapter }: BookReaderProps) {
     if (!isFullscreen && fullscreenRef.current) {
       try {
         await fullscreenRef.current.requestFullscreen()
+        if (isMobile()) lockLandscape()
         calcFullscreenSize()
       } catch { /* ignore */ }
     } else {
       try {
+        if (isMobile()) unlockOrientation()
         await document.exitFullscreen()
       } catch { /* ignore */ }
     }
@@ -187,9 +217,14 @@ export function BookReader({ chapter }: BookReaderProps) {
   return (
     <div
       ref={fullscreenRef}
-      className={`relative flex flex-col items-center justify-center gap-3 overflow-hidden ${
+      className={`relative flex flex-col items-center justify-center gap-3 overflow-hidden overflow-x-hidden ${
         isFullscreen ? "fixed inset-0 z-[9999] bg-black" : "flex-1 min-h-0 py-3 px-2"
       }`}
+      style={
+        isFullscreen && isMobile()
+          ? { maxWidth: "100vw", maxHeight: "100dvh", touchAction: "none" as const }
+          : undefined
+      }
     >
       {/* Botão tela cheia */}
       <button

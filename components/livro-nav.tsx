@@ -30,7 +30,7 @@ export function LivroNav() {
             </Link>
           </Button>
           <Button variant="ghost" size="sm" asChild>
-            <Link href="/">
+            <Link href="/inicio">
               <Home className="h-4 w-4 mr-1" />
               Início
             </Link>

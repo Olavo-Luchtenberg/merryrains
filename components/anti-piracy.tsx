@@ -38,12 +38,21 @@ export function AntiPiracy() {
         e.preventDefault()
         return false
       }
+      // Impedir Ctrl+X (Recortar)
+      if ((e.ctrlKey || e.metaKey) && e.keyCode === 88) {
+        e.preventDefault()
+        return false
+      }
       // Impedir impressão (Ctrl+P / Cmd+P)
       if ((e.ctrlKey || e.metaKey) && e.key === "p") {
         e.preventDefault()
       }
       // Impedir salvar página (Ctrl+S / Cmd+S)
       if ((e.ctrlKey || e.metaKey) && e.key === "s") {
+        e.preventDefault()
+      }
+      // Impedir Win+Shift+S (atalho Windows para captura) - o Windows pode interceptar antes
+      if (e.shiftKey && e.key?.toLowerCase() === "s" && (e.metaKey || e.code === "MetaLeft" || e.code === "MetaRight")) {
         e.preventDefault()
       }
       // Impedir Print Screen
@@ -60,16 +69,8 @@ export function AntiPiracy() {
         } catch {
           // Clipboard pode estar bloqueado
         }
-        alert("Prints não são permitidos neste site.")
+        alert("Capturas de tela não são permitidas neste site.")
       }
-    }
-
-    // Truque do foco: desfoca ao perder foco (contra Win+Shift+S)
-    const handleBlur = () => {
-      document.body.style.filter = "blur(20px)"
-    }
-    const handleFocus = () => {
-      document.body.style.filter = "none"
     }
 
     // Anti-debugger: trava enquanto o DevTools estiver aberto
@@ -85,8 +86,6 @@ export function AntiPiracy() {
     document.addEventListener("dragstart", preventDrag)
     document.addEventListener("keydown", preventKeyboard, true)
     document.addEventListener("keyup", handlePrintScreen)
-    window.addEventListener("blur", handleBlur)
-    window.addEventListener("focus", handleFocus)
 
     return () => {
       if (debuggerInterval) clearInterval(debuggerInterval)
@@ -94,8 +93,6 @@ export function AntiPiracy() {
       document.removeEventListener("dragstart", preventDrag)
       document.removeEventListener("keydown", preventKeyboard, true)
       document.removeEventListener("keyup", handlePrintScreen)
-      window.removeEventListener("blur", handleBlur)
-      window.removeEventListener("focus", handleFocus)
     }
   }, [])
 

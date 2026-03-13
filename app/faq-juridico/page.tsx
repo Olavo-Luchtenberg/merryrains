@@ -29,9 +29,14 @@ export default function FaqJuridicoPage() {
       <h2>3. Meus dados de CPF e nascimento estão seguros com a validação do Serpro?</h2>
       <p>
         Absolutamente. A consulta ao Serpro/Governo Federal serve apenas para validar que
-        você é uma pessoa real e maior de idade. Nós não armazenamos esses dados de forma
-        que permita reconstruir a identidade; utilizamos apenas o resultado da validação
-        (aprovado/recusado) para fins de segurança da transação.
+        você é uma pessoa real e maior de idade. Nós não armazenamos dados sensíveis além
+        do necessário para a conformidade legal (LGPD).
+      </p>
+
+      <h2>4. Posso revender os livros que comprei?</h2>
+      <p>
+        Não. Você adquiriu uma licença de leitura, não o direito de exploração comercial
+        da obra. A revenda sem autorização é crime de pirataria.
       </p>
     </LegalPageLayout>
   )

@@ -4,6 +4,27 @@ import React, { useRef, useState, useEffect, useCallback } from "react"
 import HTMLFlipBook from "react-pageflip"
 import { PREVIEW_PAGE_IMAGES } from "@/lib/book-pages"
 
+const PAGE_RATIO = 400 / 560
+
+function isMobile(): boolean {
+  if (typeof window === "undefined") return false
+  return window.innerWidth < 768 || /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
+}
+
+function lockLandscape(): void {
+  try {
+    const o = (screen as { orientation?: { lock?: (mode: string) => Promise<void> } }).orientation
+    if (o?.lock) o.lock("landscape").catch(() => {})
+  } catch { /* ignore */ }
+}
+
+function unlockOrientation(): void {
+  try {
+    const o = (screen as { orientation?: { unlock?: () => void } }).orientation
+    if (o?.unlock) o.unlock()
+  } catch { /* ignore */ }
+}
+
 // Ícones inline para fullscreen
 function IconExpand() {
   return (
@@ -55,20 +76,22 @@ export function BookPreview() {
   useEffect(() => { setMounted(true) }, [])
 
   // Calcula dimensões para tela cheia: maximiza o livro na tela
+  // Mobile fullscreen: otimizado para landscape, duas páginas lado a lado, sem cortes
   const calcFsSize = useCallback(() => {
     const vw = window.innerWidth
     const vh = window.innerHeight
-    const controlsH = 72 // altura dos controles embaixo
+    const mobile = isMobile()
+    const controlsH = mobile ? 56 : 72
     const availH = vh - controlsH
-    const availW = vw - 16 // margem mínima
+    const availW = vw - (mobile ? 8 : 16)
 
-    // Tenta preencher pela altura primeiro
-    let h = availH
-    let w = Math.round(h * (400 / 560))
-    // Se as duas páginas não cabem na largura, limita pela largura
-    if (w * 2 > availW) {
-      w = Math.floor(availW / 2)
-      h = Math.round(w * (560 / 400))
+    // Duas páginas lado a lado: cada página = w x h, total 2w de largura
+    // Escala para caber: limitar por largura OU altura
+    let w = Math.floor(availW / 2)
+    let h = Math.round(w / PAGE_RATIO)
+    if (h > availH) {
+      h = Math.floor(availH)
+      w = Math.round(h * PAGE_RATIO)
     }
     setFsPageWidth(w)
     setFsPageHeight(h)
@@ -79,7 +102,12 @@ export function BookPreview() {
     const onFsChange = () => {
       const isFull = !!document.fullscreenElement
       setIsFullscreen(isFull)
-      if (isFull) calcFsSize()
+      if (isFull) {
+        if (isMobile()) lockLandscape()
+        calcFsSize()
+      } else {
+        if (isMobile()) unlockOrientation()
+      }
     }
     document.addEventListener("fullscreenchange", onFsChange)
     return () => document.removeEventListener("fullscreenchange", onFsChange)
@@ -97,10 +125,12 @@ export function BookPreview() {
     if (!isFullscreen) {
       try {
         await fullscreenRef.current?.requestFullscreen()
+        if (isMobile()) lockLandscape()
         calcFsSize()
       } catch { /* ignore */ }
     } else {
       try {
+        if (isMobile()) unlockOrientation()
         await document.exitFullscreen()
       } catch { /* ignore */ }
     }
@@ -278,9 +308,18 @@ export function BookPreview() {
       ref={fullscreenRef}
       className={`relative flex flex-col items-center justify-center gap-4 ${
         isFullscreen
-          ? "fixed inset-0 z-[9999] bg-black"
+          ? "fixed inset-0 z-[9999] bg-black overflow-hidden overflow-x-hidden"
           : "w-full py-8 px-4"
       }`}
+      style={
+        isFullscreen && isMobile()
+          ? {
+              maxWidth: "100vw",
+              maxHeight: "100dvh",
+              touchAction: "none",
+            }
+          : undefined
+      }
     >
       {/* Botão tela cheia — fixo no canto superior direito */}
       <button
@@ -295,8 +334,8 @@ export function BookPreview() {
 
       <div
         ref={containerRef}
-        className={`shadow-2xl [&_.stf__wrapper]:!bg-transparent [&_.stf__block]:!bg-transparent ${isFirstPage ? "pointer-events-none" : ""}`}
-        style={{ width: activeW * 2, height: activeH, flexShrink: 0 }}
+        className={`shadow-2xl [&_.stf__wrapper]:!bg-transparent [&_.stf__block]:!bg-transparent flex-shrink-0 ${isFirstPage ? "pointer-events-none" : ""}`}
+        style={{ width: activeW * 2, height: activeH }}
       >
         <HTMLFlipBook
           key={`book-${isFullscreen ? "fs" : "normal"}-${activeW}-${activeH}`}

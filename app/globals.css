@@ -110,13 +110,19 @@
     -ms-user-select: text;
     user-select: text;
   }
-  /* Impedir impressão - esconde conteúdo e mostra mensagem */
+  /* Impedir impressão - esconde conteúdo e mostra mensagem (desktop e mobile) */
   @media print {
-    body * {
+    *,
+    *::before,
+    *::after {
       visibility: hidden !important;
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
     }
+    html,
     body {
       visibility: visible !important;
+      background: #000 !important;
     }
     body::before {
       content: "Impressão não autorizada. Conteúdo protegido.";
@@ -126,8 +132,10 @@
       top: 50% !important;
       left: 50% !important;
       transform: translate(-50%, -50%) !important;
-      font-size: 1.5rem !important;
+      font-size: 1.25rem !important;
       text-align: center !important;
+      color: #fff !important;
+      z-index: 999999 !important;
     }
   }
   a, button, [role="button"] {
