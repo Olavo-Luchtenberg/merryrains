@@ -146,7 +146,7 @@ export function FloatingNav() {
       </nav>
 
       {/* Mobile nav - hamburger (always visible on mobile for access) */}
-      <div className="fixed left-4 right-4 md:hidden z-40 flex justify-between items-center px-2 py-2 rounded-2xl mx-2 border border-border/50 bg-card/60 backdrop-blur-xl" style={{ top: 'max(1rem, env(safe-area-inset-top))' }}>
+      <div className="fixed left-2 right-2 sm:left-4 sm:right-4 md:hidden z-40 flex justify-between items-center px-3 py-2.5 rounded-2xl mx-2 border border-border/50 bg-card/80 backdrop-blur-xl" style={{ top: 'max(0.75rem, env(safe-area-inset-top))' }}>
         <button
           type="button"
           className="flex items-center hover:opacity-80 transition-opacity"

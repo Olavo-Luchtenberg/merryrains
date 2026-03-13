@@ -29,6 +29,13 @@ export function RainSound({ autoStart = false, visible = true }: RainSoundProps)
   const [isPlaying, setIsPlaying] = useState(false)
   const [volume, setVolume] = useState(0.3)
   const [showControls, setShowControls] = useState(false)
+  const [isMobile, setIsMobile] = useState(false)
+  useEffect(() => {
+    const check = () => setIsMobile(window.matchMedia("(hover: none)").matches)
+    check()
+    window.addEventListener("resize", check)
+    return () => window.removeEventListener("resize", check)
+  }, [])
 
   const playThunder = useCallback(() => {
     const ctx = audioContextRef.current
@@ -277,15 +284,16 @@ export function RainSound({ autoStart = false, visible = true }: RainSoundProps)
 
   return (
     <div
-      className={`fixed bottom-6 right-6 z-[100] flex items-center gap-3 transition-opacity duration-300 ${
+      className={`fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-[100] flex items-center gap-3 transition-opacity duration-300 ${
         visible ? "opacity-100" : "opacity-0 pointer-events-none"
       }`}
+      style={{ bottom: "max(1rem, env(safe-area-inset-bottom))" }}
       onMouseEnter={() => setShowControls(true)}
       onMouseLeave={() => setShowControls(false)}
     >
       <div
-        className={`flex items-center gap-2 rounded-full bg-secondary/80 backdrop-blur-md px-4 py-2 border border-border/50 transition-all duration-300 ${
-          showControls && isPlaying
+        className={`flex items-center gap-2 rounded-full bg-secondary/80 backdrop-blur-md px-3 sm:px-4 py-2 border border-border/50 transition-all duration-300 ${
+          (showControls && isPlaying) || (isMobile && isPlaying)
             ? "opacity-100 translate-x-0"
             : "opacity-0 translate-x-4 pointer-events-none"
         }`}
@@ -308,14 +316,14 @@ export function RainSound({ autoStart = false, visible = true }: RainSoundProps)
           step="0.05"
           value={volume}
           onChange={(e) => setVolume(parseFloat(e.target.value))}
-          className="w-20 h-1 accent-primary cursor-pointer"
+          className="w-16 sm:w-20 h-1 accent-primary cursor-pointer touch-none"
           aria-label="Volume da chuva"
         />
       </div>
 
       <button
         onClick={toggleSound}
-        className={`group relative flex items-center justify-center w-12 h-12 rounded-full border backdrop-blur-md transition-all duration-300 cursor-pointer ${
+        className={`group relative flex items-center justify-center w-11 h-11 sm:w-12 sm:h-12 rounded-full border backdrop-blur-md transition-all duration-300 cursor-pointer shrink-0 ${
           isPlaying
             ? "bg-primary/20 border-primary/50 shadow-[0_0_20px_rgba(255,255,255,0.2)]"
             : "bg-secondary/80 border-border/50 hover:border-primary/30"

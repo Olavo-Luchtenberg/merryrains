@@ -65,22 +65,22 @@ export function WelcomeScreen() {
       {/* Overlay escuro */}
       <div className="absolute inset-0 bg-background/60 backdrop-blur-[2px]" aria-hidden="true" />
 
-      <div className="relative z-10 max-w-lg w-full text-center">
-        <h1 className="font-serif text-4xl sm:text-5xl md:text-6xl font-bold text-foreground mb-4 animate-in fade-in slide-in-from-bottom-4 duration-700">
+      <div className="relative z-10 max-w-lg w-full text-center px-4 sm:px-6">
+        <h1 className="font-serif text-3xl min-[400px]:text-4xl sm:text-5xl md:text-6xl font-bold text-foreground mb-3 sm:mb-4 animate-in fade-in slide-in-from-bottom-4 duration-700">
           Seja Bem-Vindo
         </h1>
 
-        <p className="text-muted-foreground text-lg sm:text-xl mb-12 animate-in fade-in slide-in-from-bottom-4 duration-700 delay-150">
+        <p className="text-muted-foreground text-base sm:text-lg md:text-xl mb-8 sm:mb-12 animate-in fade-in slide-in-from-bottom-4 duration-700 delay-150 px-1">
           Para que a experiência seja mais imersiva, comece escolhendo a sua trilha sonora!
         </p>
 
-        <div className="flex flex-wrap justify-center gap-3 mb-12 animate-in fade-in slide-in-from-bottom-4 duration-700 delay-300">
+        <div className="flex flex-wrap justify-center gap-3 mb-8 sm:mb-12 animate-in fade-in slide-in-from-bottom-4 duration-700 delay-300">
           {options.map((opt) => (
             <button
               key={opt.id}
               type="button"
               onClick={() => setSelected(opt.id)}
-              className={`group flex flex-col items-center gap-2 py-4 px-3 rounded-xl border transition-all duration-300 ${
+              className={`group flex flex-col items-center gap-2 py-4 px-4 sm:px-3 rounded-xl border transition-all duration-300 flex-1 min-w-0 sm:flex-initial ${
                 selected === opt.id
                   ? "border-primary bg-primary/10 shadow-[0_0_20px_rgba(255,255,255,0.1)]"
                   : "border-border bg-card/50 hover:border-primary/40 hover:bg-card/80"

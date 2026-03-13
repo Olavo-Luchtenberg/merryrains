@@ -49,7 +49,7 @@ export function FeaturesSection() {
         {/* Bloco 1 */}
         <ScrollReveal delay={150}>
           <div className="rounded-2xl border border-border bg-card p-6 sm:p-8 md:p-10">
-            <h3 className="text-xl sm:text-2xl md:text-3xl font-bold font-serif text-foreground mb-6">
+            <h3 className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold font-serif text-foreground mb-6 break-words">
               CHEGA DE TIJOLOS DE PAPEL: O LIVRO QUE RESPEITA O SEU CÉREBRO
             </h3>
             <div className="space-y-4 text-muted-foreground font-sans leading-relaxed">
@@ -79,7 +79,7 @@ export function FeaturesSection() {
         {/* Bloco 2 */}
         <ScrollReveal delay={200}>
           <div className="rounded-2xl border border-border bg-card p-6 sm:p-8 md:p-10">
-            <h3 className="text-xl sm:text-2xl md:text-3xl font-bold font-serif text-foreground mb-6">
+            <h3 className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold font-serif text-foreground mb-6 break-words">
               MERRY RAINS NÃO É UM PRODUTO. É UMA OBSESSÃO.
             </h3>
             <div className="space-y-4 text-muted-foreground font-sans leading-relaxed">

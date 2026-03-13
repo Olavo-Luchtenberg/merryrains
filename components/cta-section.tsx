@@ -47,14 +47,14 @@ export function CtaSection() {
         </ScrollReveal>
 
         <ScrollReveal delay={100}>
-          <h2 className="text-2xl sm:text-4xl md:text-6xl font-bold font-serif text-foreground mb-4 sm:mb-6">
-            <span className="block whitespace-nowrap">Algumas pessoas <span className="font-bold" style={{ color: "#a6a6a6" }}>sentem</span> a chuva,</span>
+          <h2 className="text-2xl sm:text-4xl md:text-6xl font-bold font-serif text-foreground mb-4 sm:mb-6 text-balance">
+            <span className="block">Algumas pessoas <span className="font-bold" style={{ color: "#a6a6a6" }}>sentem</span> a chuva,</span>
             <span className="block text-primary">outras apenas se <span className="font-bold" style={{ color: "#a6a6a6" }}>molham</span></span>
           </h2>
         </ScrollReveal>
 
         <ScrollReveal delay={200}>
-          <p className="text-base sm:text-lg text-muted-foreground mb-8 sm:mb-12 max-w-2xl mx-auto leading-relaxed font-sans">
+          <p className="text-base sm:text-lg text-muted-foreground mb-8 sm:mb-12 max-w-2xl mx-auto leading-relaxed font-sans px-2">
             <span className="font-bold" style={{ color: "#a6a6a6" }}>MERRY RAINS</span> não é para quem quer se molhar.<br />
             É para quem aguenta o impacto de sentir a tempestade inteira.<br />
             O seu lugar está garantido, ou você vai continuar no raso?
@@ -87,7 +87,7 @@ export function CtaSection() {
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <a
               href="/login?callbackUrl=/checkout"
-              className="group relative inline-flex items-center justify-center gap-2 px-6 py-3.5 text-sm font-bold tracking-wider uppercase bg-primary text-primary-foreground rounded-lg overflow-hidden font-sans whitespace-nowrap"
+              className="group relative inline-flex items-center justify-center gap-2 px-6 py-3.5 text-sm font-bold tracking-wider uppercase bg-primary text-primary-foreground rounded-lg overflow-hidden font-sans text-center min-w-0"
             >
               <span className="relative z-10">QUERO SENTIR A EXPERIENCIA</span>
               <div className="absolute inset-0 bg-accent/80 translate-y-full group-hover:translate-y-0 transition-transform duration-300" />

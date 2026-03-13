@@ -117,7 +117,7 @@ function DiferencialCard({
             setExpanded(!expanded)
           }
         }}
-        className="group relative rounded-2xl border border-border bg-card p-5 sm:p-6 md:p-8 lg:p-10 transition-all duration-500 hover:border-primary/30"
+        className="group relative rounded-2xl border border-border bg-card p-4 sm:p-6 md:p-8 lg:p-10 transition-all duration-500 hover:border-primary/30 overflow-hidden"
       >
         {/* Interactive glow */}
         <div
@@ -151,7 +151,7 @@ function DiferencialCard({
 
           <div className="flex-1">
             <div className="flex items-center gap-3 mb-3">
-              <h3 className="text-xl md:text-2xl font-bold font-serif text-foreground">
+              <h3 className="text-lg sm:text-xl md:text-2xl font-bold font-serif text-foreground break-words">
                 {item.title}
               </h3>
               <svg
@@ -167,7 +167,7 @@ function DiferencialCard({
               </svg>
             </div>
 
-            <p className="text-muted-foreground leading-relaxed font-sans">
+            <p className="text-muted-foreground leading-relaxed font-sans text-sm sm:text-base break-words">
               {item.description}
             </p>
 
@@ -175,7 +175,7 @@ function DiferencialCard({
             <div
               className="overflow-hidden transition-all duration-500"
               style={{
-                maxHeight: expanded ? "100px" : "0px",
+                maxHeight: expanded ? "200px" : "0px",
                 opacity: expanded ? 1 : 0,
                 marginTop: expanded ? "16px" : "0px",
               }}

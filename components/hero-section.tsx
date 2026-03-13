@@ -85,9 +85,9 @@ export function HeroSection() {
         }}
       >
         {/* Title & CTA */}
-        <div className="flex flex-col items-center text-center gap-6">
+        <div className="flex flex-col items-center text-center gap-4 sm:gap-6">
           <p
-            className="text-sm tracking-[0.4em] uppercase font-sans"
+            className="text-xs sm:text-sm tracking-[0.3em] sm:tracking-[0.4em] uppercase font-sans max-w-[90vw]"
             style={{
               color: '#ffffff',
               opacity: titleRevealed ? 1 : 0,
@@ -133,7 +133,7 @@ export function HeroSection() {
           </h1>
 
           <div
-            className="max-w-md text-lg leading-relaxed text-muted-foreground font-sans space-y-6 mx-auto"
+            className="max-w-md text-base sm:text-lg leading-relaxed text-muted-foreground font-sans space-y-4 sm:space-y-6 mx-auto px-2"
             style={{
               opacity: titleRevealed ? 1 : 0,
               transform: titleRevealed ? "translateY(0)" : "translateY(20px)",
@@ -147,7 +147,7 @@ export function HeroSection() {
           </div>
 
           <div
-            className="flex flex-col sm:flex-row gap-4 justify-center"
+            className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center w-full max-w-md sm:max-w-none px-2"
             style={{
               opacity: titleRevealed ? 1 : 0,
               transform: titleRevealed ? "translateY(0)" : "translateY(20px)",
@@ -156,7 +156,7 @@ export function HeroSection() {
           >
             <a
               href="/login?callbackUrl=/checkout"
-              className="group relative inline-flex items-center justify-center gap-2 px-8 py-4 text-sm font-semibold tracking-wider uppercase rounded-lg overflow-hidden font-sans"
+              className="group relative inline-flex items-center justify-center gap-2 px-6 sm:px-8 py-3.5 sm:py-4 text-sm font-semibold tracking-wider uppercase rounded-lg overflow-hidden font-sans w-full sm:w-auto"
               style={{ backgroundColor: '#ffffff', color: '#000000' }}
             >
               <span className="relative z-10">Garanta Sua Experiência</span>
@@ -164,7 +164,7 @@ export function HeroSection() {
             </a>
             <a
               href="#previa"
-              className="inline-flex items-center justify-center gap-2 px-8 py-4 text-sm font-semibold tracking-wider uppercase border border-border text-foreground rounded-lg hover:bg-secondary transition-colors font-sans"
+              className="inline-flex items-center justify-center gap-2 px-6 sm:px-8 py-3.5 sm:py-4 text-sm font-semibold tracking-wider uppercase border border-border text-foreground rounded-lg hover:bg-secondary transition-colors font-sans w-full sm:w-auto"
             >
               ENTRAR NA HISTÓRIA
             </a>

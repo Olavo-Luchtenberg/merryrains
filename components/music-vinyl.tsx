@@ -33,10 +33,9 @@ export function MusicVinyl() {
 
   return (
     <>
-      {/* Vitrola e Spotify embed lado a lado - canto superior esquerdo */}
+      {/* Vitrola + Spotify: em mobile no canto inferior esquerdo; em desktop no canto superior esquerdo */}
       <div
-        className="fixed top-4 left-4 z-50 flex items-start gap-3"
-        style={{ top: "max(1rem, env(safe-area-inset-top))" }}
+        className="fixed left-4 z-50 flex gap-3 max-md:bottom-24 max-md:top-auto max-md:flex-col-reverse max-md:items-end md:bottom-auto md:top-4 md:items-start"
       >
         <Dialog>
           <DialogTrigger asChild>
@@ -76,31 +75,42 @@ export function MusicVinyl() {
             </button>
           </DialogTrigger>
           <DialogContent className="max-w-[560px] w-[95vw] p-0 overflow-y-auto max-h-[95vh] border-border rounded-2xl">
-          <DialogTitle className="sr-only">Vitrola - Capa do álbum</DialogTitle>
-          <div className="flex flex-col">
-            {/* Capa do álbum */}
-            <div className="relative w-full aspect-square shrink-0">
-              <Image
-                src={ALBUM_COVERS[currentIndex]}
-                alt="Capa do álbum"
-                fill
-                className="object-cover rounded-t-2xl"
-                sizes="560px"
-                priority
-              />
+            <DialogTitle className="sr-only">Vitrola - Capa do álbum</DialogTitle>
+            <div className="flex flex-col">
+              {/* Capa do álbum */}
+              <div className="relative w-full aspect-square shrink-0">
+                <Image
+                  src={ALBUM_COVERS[currentIndex]}
+                  alt="Capa do álbum"
+                  fill
+                  className="object-cover rounded-t-2xl"
+                  sizes="560px"
+                  priority
+                />
+              </div>
+              {/* Spotify embed dentro do modal no mobile */}
+              <div className="p-4 md:hidden">
+                <iframe
+                  className="rounded-xl border-0 w-full"
+                  src={SPOTIFY_PLAYLIST_URL}
+                  height="152"
+                  allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+                  loading="lazy"
+                  title="Spotify Playlist"
+                />
+              </div>
+              <p className="text-center text-muted-foreground text-sm py-3 px-4">
+                Clique na vitrola para ver a capa
+              </p>
             </div>
-            <p className="text-center text-muted-foreground text-sm py-3 px-4">
-              Clique na vitrola para ver a capa
-            </p>
-          </div>
-        </DialogContent>
+          </DialogContent>
         </Dialog>
-        {/* Spotify embed ao lado da vitrola - sempre montado para continuar tocando */}
+        {/* Spotify embed ao lado da vitrola - apenas em desktop; em mobile fica no modal */}
         <iframe
           data-testid="embed-iframe"
-          className="rounded-xl border-0 w-[300px] shrink-0"
+          className="hidden md:block rounded-xl border-0 w-[280px] min-w-[280px] shrink-0"
           src={SPOTIFY_PLAYLIST_URL}
-          width="300"
+          width="280"
           height="152"
           allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
           loading="lazy"

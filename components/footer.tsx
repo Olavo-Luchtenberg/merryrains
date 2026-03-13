@@ -9,7 +9,7 @@ export function Footer() {
   const { setHasChosen } = useSoundtrack()
 
   return (
-    <footer className="relative py-8 sm:py-12 md:py-16 px-4 sm:px-6 border-t border-border">
+    <footer className="relative py-8 sm:py-12 md:py-16 px-4 sm:px-6 border-t border-border" style={{ paddingBottom: "max(2rem, env(safe-area-inset-bottom))" }}>
       <div className="max-w-6xl mx-auto">
         <ScrollReveal>
           <div className="flex flex-col md:flex-row items-center justify-between gap-6 sm:gap-8">
@@ -59,7 +59,7 @@ export function Footer() {
           </div>
 
           <div className="mt-8 sm:mt-12 pt-6 sm:pt-8 border-t border-border">
-            <div className="flex flex-wrap justify-center gap-x-4 gap-y-1 text-xs text-muted-foreground mb-4">
+            <div className="grid grid-cols-2 sm:flex sm:flex-wrap sm:justify-center gap-x-3 gap-y-2 sm:gap-x-4 sm:gap-y-1 text-xs text-muted-foreground mb-4">
               <Link href="/privacidade" className="hover:text-primary transition-colors">Privacidade</Link>
               <Link href="/cookies" className="hover:text-primary transition-colors">Cookies</Link>
               <Link href="/termos" className="hover:text-primary transition-colors">Termos</Link>

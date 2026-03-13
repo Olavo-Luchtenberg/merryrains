@@ -90,9 +90,11 @@
     scroll-behavior: smooth;
     -webkit-text-size-adjust: 100%;
     cursor: default !important;
+    overflow-x: hidden;
   }
   body {
     @apply bg-background text-foreground;
+    overflow-x: hidden;
     cursor: default !important;
     -webkit-user-select: none;
     -moz-user-select: none;
