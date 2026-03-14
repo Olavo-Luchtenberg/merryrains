@@ -15,6 +15,12 @@ function isMobile(): boolean {
   return window.innerWidth < 768 || /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
 }
 
+function isIOS(): boolean {
+  if (typeof navigator === "undefined") return false
+  return /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1)
+}
+
+
 function lockLandscape(): void {
   try {
     const o = (screen as { orientation?: { lock?: (mode: string) => Promise<void> } }).orientation
@@ -67,6 +73,12 @@ export function BookReader({ chapter }: BookReaderProps) {
 
   useEffect(() => setMounted(true), [])
 
+  useEffect(() => {
+    return () => {
+      if (isIOS()) document.body.style.overflow = ""
+    }
+  }, [])
+
   // Calcula dimensões para caber na tela sem scroll (85% do espaço disponível)
   const calcSize = useCallback(() => {
     const vw = window.innerWidth
@@ -117,6 +129,7 @@ export function BookReader({ chapter }: BookReaderProps) {
   }, [mounted, isFullscreen, calcSize, calcFullscreenSize])
 
   useEffect(() => {
+    if (isIOS()) return
     const onFsChange = () => {
       const isFull = !!document.fullscreenElement
       setIsFullscreen(isFull)
@@ -133,9 +146,26 @@ export function BookReader({ chapter }: BookReaderProps) {
   }, [calcSize, calcFullscreenSize])
 
   const toggleFullscreen = useCallback(async () => {
+    // iOS Safari: Fullscreen API não funciona em divs — usa pseudo-fullscreen
+    if (isIOS()) {
+      setIsFullscreen((prev) => {
+        const next = !prev
+        if (next) {
+          document.body.style.overflow = "hidden"
+          calcFullscreenSize()
+        } else {
+          document.body.style.overflow = ""
+          calcSize()
+        }
+        return next
+      })
+      return
+    }
     if (!isFullscreen && fullscreenRef.current) {
       try {
-        await fullscreenRef.current.requestFullscreen()
+        const el = fullscreenRef.current
+        const fn = el.requestFullscreen ?? (el as HTMLElement & { webkitRequestFullscreen?: () => void }).webkitRequestFullscreen
+        if (fn) await fn.call(el)
         if (isMobile()) lockLandscape()
         calcFullscreenSize()
       } catch { /* ignore */ }
@@ -145,7 +175,7 @@ export function BookReader({ chapter }: BookReaderProps) {
         await document.exitFullscreen()
       } catch { /* ignore */ }
     }
-  }, [isFullscreen, calcFullscreenSize])
+  }, [isFullscreen, calcFullscreenSize, calcSize])
 
   const handleFlip = useCallback(
     (e: { data: number }) => {

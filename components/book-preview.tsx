@@ -11,6 +11,12 @@ function isMobile(): boolean {
   return window.innerWidth < 768 || /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
 }
 
+function isIOS(): boolean {
+  if (typeof navigator === "undefined") return false
+  return /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1)
+}
+
+
 function lockLandscape(): void {
   try {
     const o = (screen as { orientation?: { lock?: (mode: string) => Promise<void> } }).orientation
@@ -75,6 +81,13 @@ export function BookPreview() {
 
   useEffect(() => { setMounted(true) }, [])
 
+  // Limpa overflow do body ao desmontar (ex: fechar livro em pseudo-fullscreen no iOS)
+  useEffect(() => {
+    return () => {
+      if (isIOS()) document.body.style.overflow = ""
+    }
+  }, [])
+
   // Calcula dimensões para tela cheia: maximiza o livro na tela
   // Mobile fullscreen: otimizado para landscape, duas páginas lado a lado, sem cortes
   const calcFsSize = useCallback(() => {
@@ -97,8 +110,9 @@ export function BookPreview() {
     setFsPageHeight(h)
   }, [])
 
-  // Escuta mudanças de fullscreen (ESC do browser)
+  // Escuta fullscreenchange (ESC do browser) — não aplicável no iOS (usa pseudo-fullscreen)
   useEffect(() => {
+    if (isIOS()) return
     const onFsChange = () => {
       const isFull = !!document.fullscreenElement
       setIsFullscreen(isFull)
@@ -122,9 +136,25 @@ export function BookPreview() {
   }, [isFullscreen, calcFsSize])
 
   const toggleFullscreen = useCallback(async () => {
+    // iOS Safari: Fullscreen API não funciona em divs — usa pseudo-fullscreen via CSS
+    if (isIOS()) {
+      setIsFullscreen((prev) => {
+        const next = !prev
+        if (next) {
+          document.body.style.overflow = "hidden"
+          calcFsSize()
+        } else {
+          document.body.style.overflow = ""
+        }
+        return next
+      })
+      return
+    }
     if (!isFullscreen) {
       try {
-        await fullscreenRef.current?.requestFullscreen()
+        const el = fullscreenRef.current
+        const fn = el?.requestFullscreen ?? (el as HTMLElement & { webkitRequestFullscreen?: () => void })?.webkitRequestFullscreen
+        if (fn) await fn.call(el)
         if (isMobile()) lockLandscape()
         calcFsSize()
       } catch { /* ignore */ }
@@ -403,7 +433,12 @@ export function BookPreview() {
       </p>
       <button
         onClick={() => {
-          if (isFullscreen) document.exitFullscreen().catch(() => {})
+          if (isFullscreen) {
+            if (isIOS()) {
+              document.body.style.overflow = ""
+              setIsFullscreen(false)
+            } else document.exitFullscreen().catch(() => {})
+          }
           setOpened(false)
           setCurrentPage(0)
         }}
