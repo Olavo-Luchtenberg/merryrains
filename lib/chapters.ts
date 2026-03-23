@@ -11,8 +11,9 @@ export const CHAPTERS: Chapter[] = [
   { id: 7, title: "Capítulo 7", startPage: 70, endPage: 173 },
 ]
 
-export function getChapterByIndex(index: number): Chapter | undefined {
-  return CHAPTERS.find((ch) => ch.id === index)
+// Retorna capítulo pelo número (id) mostrado para o leitor
+export function getChapterByIndex(id: number): Chapter | undefined {
+  return CHAPTERS.find((ch) => ch.id === id)
 }
 
 export function getChapterForPage(pageIndex: number): Chapter | undefined {

@@ -29,11 +29,12 @@ export default async function BibliotecaPage({
   return (
     <div className="min-h-screen flex flex-col bg-background">
       <BibliotecaNav />
-      <main className="flex-1 container py-8 px-4">
-        {showSuccess && <BibliotecaSuccessBanner />}
-        <h1 className="font-serif text-2xl md:text-3xl font-bold mb-6">
-          Minha biblioteca
-        </h1>
+      <main className="flex-1 flex flex-col">
+        {showSuccess && (
+          <div className="px-4 sm:px-6 lg:px-8 pt-4 sm:pt-6 lg:pt-8">
+            <BibliotecaSuccessBanner />
+          </div>
+        )}
         <BibliotecaContent hasPurchase={hasPurchase} />
       </main>
     </div>

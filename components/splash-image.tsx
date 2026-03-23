@@ -16,7 +16,7 @@ const SPLASH_IMAGE = encodeURI("/Design sem nome (26).png")
 export function SplashImage() {
   return (
     <section
-      className="relative min-h-screen w-full flex flex-col items-center bg-black pt-[max(0px,calc((100vh-56.25vw)/2))] pb-12 sm:pb-16"
+      className="relative min-h-screen w-full flex flex-col items-center bg-black pt-[max(0px,calc((100vh-56.25vw)/2))] pb-12 sm:pb-16 z-0"
       aria-label="Merry Rains - Bem-vindo"
     >
       {/* Área 16:9 igual à hitbox da chuva (object-contain no viewport) - guarda-chuva em tamanho original */}

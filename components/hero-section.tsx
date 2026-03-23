@@ -41,13 +41,13 @@ export function HeroSection() {
 
   const heroScrollY = Math.max(0, scrollY - viewportHeight)
   const parallaxBg = heroScrollY * 0.4
-  const titleOpacity = Math.max(0, 1 - heroScrollY / 600)
-  const titleScale = Math.max(0.8, 1 - heroScrollY / 3000)
+  const titleOpacity = Math.max(0.9, 1 - heroScrollY / 2000)
+  const titleScale = Math.max(0.95, 1 - heroScrollY / 4000)
 
   return (
     <section
       ref={heroRef}
-      className="relative min-h-screen flex items-center justify-center overflow-hidden"
+      className="relative min-h-screen flex items-center justify-center overflow-hidden z-10"
     >
       {/* Animated background orbs */}
       <div
@@ -89,7 +89,8 @@ export function HeroSection() {
           <p
             className="text-xs sm:text-sm tracking-[0.3em] sm:tracking-[0.4em] uppercase font-sans max-w-[90vw]"
             style={{
-              color: '#ffffff',
+              color: "#ffffff",
+              textShadow: "0 1px 3px rgba(0,0,0,0.9), 0 0 24px rgba(0,0,0,0.6)",
               opacity: titleRevealed ? 1 : 0,
               transform: titleRevealed ? "translateY(0)" : "translateY(20px)",
               transition: "all 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.2s",
@@ -105,7 +106,7 @@ export function HeroSection() {
                 className="inline-block text-4xl min-[400px]:text-5xl sm:text-6xl md:text-8xl lg:text-9xl font-bold tracking-tight"
                 style={{
                   color: "#ffffff",
-                  textShadow: "2px 2px 0 #a6a6a6",
+                  textShadow: "0 2px 4px rgba(0,0,0,0.9), 2px 2px 0 #a6a6a6",
                   opacity: titleRevealed ? 1 : 0,
                   transform: titleRevealed ? "translateY(0) rotateX(0)" : "translateY(40px) rotateX(40deg)",
                   transition: `all 0.8s cubic-bezier(0.16, 1, 0.3, 1) ${0.4 + i * 0.06}s`,
@@ -121,7 +122,7 @@ export function HeroSection() {
                 className="inline-block text-4xl min-[400px]:text-5xl sm:text-6xl md:text-8xl lg:text-9xl font-bold tracking-tight"
                 style={{
                   color: "#ffffff",
-                  textShadow: "2px 2px 0 #a6a6a6",
+                  textShadow: "0 2px 4px rgba(0,0,0,0.9), 2px 2px 0 #a6a6a6",
                   opacity: titleRevealed ? 1 : 0,
                   transform: titleRevealed ? "translateY(0) rotateX(0)" : "translateY(40px) rotateX(40deg)",
                   transition: `all 0.8s cubic-bezier(0.16, 1, 0.3, 1) ${0.7 + i * 0.06}s`,
@@ -133,11 +134,12 @@ export function HeroSection() {
           </h1>
 
           <div
-            className="max-w-md text-base sm:text-lg leading-relaxed text-muted-foreground font-sans space-y-4 sm:space-y-6 mx-auto px-2"
+            className="max-w-md text-base sm:text-lg leading-relaxed font-sans space-y-4 sm:space-y-6 mx-auto px-2 text-white/90"
             style={{
               opacity: titleRevealed ? 1 : 0,
               transform: titleRevealed ? "translateY(0)" : "translateY(20px)",
               transition: "all 0.8s cubic-bezier(0.16, 1, 0.3, 1) 1.1s",
+              textShadow: "0 1px 2px rgba(0,0,0,0.8), 0 0 20px rgba(0,0,0,0.5)",
             }}
           >
             <p>Não é sobre personagens.<br />É sobre pessoas.</p>

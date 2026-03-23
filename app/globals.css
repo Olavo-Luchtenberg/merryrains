@@ -174,6 +174,35 @@
   background-color: var(--card) !important;
   color: var(--foreground) !important;
 }
+
+/* Leitor: remove espaço entre as páginas para ficarem coladas */
+.flipbook .stf__parent,
+.flipbook .stf__wrapper,
+.flipbook .stf__block {
+  padding: 0 !important;
+  gap: 0 !important;
+  margin: 0 !important;
+}
+.flipbook .stf__block > * {
+  margin: 0 !important;
+  padding: 0 !important;
+}
+.flipbook .stf__item {
+  margin: 0 !important;
+  padding: 0 !important;
+}
+.flipbook .stf__item:before,
+.flipbook .stf__item:after {
+  display: none !important;
+  width: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+.flipbook .stf__wrapper > * + *,
+.flipbook .stf__block > * + * {
+  margin-left: 0 !important;
+  margin-inline-start: 0 !important;
+}
 /* Efeito molhado - mancha escurece o texto (como água no papel) e seca */
 @keyframes wet-spot-dry {
   0%, 35% {

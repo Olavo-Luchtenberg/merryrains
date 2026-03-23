@@ -54,6 +54,35 @@ function saveProgress(chapterId: number, lastPage: number) {
   }, saveProgressDebounceMs)
 }
 
+/** Efeito sonoro de página passando (Web Audio API - sem arquivo externo) */
+function playPageTurnSound() {
+  if (typeof window === "undefined") return
+  try {
+    const ctx = new (window.AudioContext || (window as unknown as { webkitAudioContext?: typeof AudioContext }).webkitAudioContext)()
+    const duration = 0.12
+    const sampleRate = ctx.sampleRate
+    const length = sampleRate * duration
+    const buffer = ctx.createBuffer(1, length, sampleRate)
+    const data = buffer.getChannelData(0)
+    for (let i = 0; i < length; i++) {
+      data[i] = (Math.random() * 2 - 1) * Math.exp(-i / (length * 0.3))
+    }
+    const src = ctx.createBufferSource()
+    src.buffer = buffer
+    const gain = ctx.createGain()
+    gain.gain.setValueAtTime(0.08, ctx.currentTime)
+    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + duration)
+    const filter = ctx.createBiquadFilter()
+    filter.type = "lowpass"
+    filter.frequency.value = 2200
+    src.connect(filter)
+    filter.connect(gain)
+    gain.connect(ctx.destination)
+    src.start(0)
+    src.stop(ctx.currentTime + duration)
+  } catch { /* ignore */ }
+}
+
 export function BookReader({ chapter }: BookReaderProps) {
   const bookRef = useRef<HTMLFlipBook>(null)
   const containerRef = useRef<HTMLDivElement>(null)
@@ -63,6 +92,7 @@ export function BookReader({ chapter }: BookReaderProps) {
   const [currentPage, setCurrentPage] = useState(1)
   const [mounted, setMounted] = useState(false)
   const [isFullscreen, setIsFullscreen] = useState(false)
+  const prevPageRef = useRef<number | null>(null)
 
   // Apenas as páginas deste capítulo
   const pageImages = useMemo(
@@ -180,6 +210,10 @@ export function BookReader({ chapter }: BookReaderProps) {
   const handleFlip = useCallback(
     (e: { data: number }) => {
       const localPage = e.data
+      if (prevPageRef.current !== null && prevPageRef.current !== localPage) {
+        playPageTurnSound()
+      }
+      prevPageRef.current = localPage
       setCurrentPage(localPage)
       const globalPageIndex = chapter.startPage + (localPage - 1)
       saveProgress(chapter.id, globalPageIndex)
@@ -268,10 +302,10 @@ export function BookReader({ chapter }: BookReaderProps) {
         {isFullscreen ? "Sair" : "Tela cheia"}
       </button>
 
-      {/* Livro: duas páginas lado a lado com efeito de virar */}
+      {/* Livro: duas páginas coladas (sem espaço entre elas) */}
       <div
         ref={containerRef}
-        className="shadow-2xl [&_.stf__wrapper]:!bg-transparent [&_.stf__block]:!bg-transparent"
+        className="shadow-2xl bg-[#1a1a1a] [&_.stf__wrapper]:!bg-transparent [&_.stf__block]:!bg-transparent"
         style={{ width: pageWidth * 2, height: pageHeight, flexShrink: 0 }}
       >
         <HTMLFlipBook
@@ -284,7 +318,7 @@ export function BookReader({ chapter }: BookReaderProps) {
           maxWidth={0}
           minHeight={0}
           maxHeight={0}
-          showCover
+          showCover={false}
           mobileScrollSupport={false}
           flippingTime={700}
           usePortrait={false}
@@ -299,7 +333,7 @@ export function BookReader({ chapter }: BookReaderProps) {
           {pageImages.map((src, i) => (
             <div
               key={i}
-              className="book-page-wrapper w-full h-full overflow-hidden bg-[#1a1a1a]"
+              className="book-page-wrapper w-full h-full overflow-hidden bg-[#1a1a1a] border-0 shadow-none"
             >
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
@@ -345,7 +379,7 @@ export function BookReader({ chapter }: BookReaderProps) {
           Setas, WASD ou scroll do mouse para virar
         </p>
         <Link
-          href="/livro"
+          href="/biblioteca"
           className="text-xs text-primary hover:underline"
         >
           Escolher outro capítulo
