@@ -5,8 +5,16 @@ import { Providers } from '@/components/providers'
 import { AntiPiracy } from '@/components/anti-piracy'
 import './globals.css'
 
-const _inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
-const _playfair = Playfair_Display({ subsets: ["latin"], variable: "--font-playfair" });
+const _inter = Inter({
+  subsets: ["latin"],
+  variable: "--font-inter",
+  display: "swap",
+});
+const _playfair = Playfair_Display({
+  subsets: ["latin"],
+  variable: "--font-playfair",
+  display: "swap",
+});
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? 'https://merryrains.com'),
@@ -33,8 +41,17 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="pt-BR">
-      <body className={`${_inter.variable} ${_playfair.variable} font-sans antialiased`}>
+    <html lang="pt-BR" suppressHydrationWarning>
+      <head>
+        <link
+          rel="preload"
+          href="/Design%20sem%20nome%20(26).png"
+          as="image"
+        />
+        <link rel="preconnect" href="https://open.spotify.com" />
+        <link rel="dns-prefetch" href="https://i.scdn.co" />
+      </head>
+      <body className={`${_inter.variable} ${_playfair.variable} font-sans antialiased`} suppressHydrationWarning>
         <Providers>
           <AntiPiracy />
           {children}

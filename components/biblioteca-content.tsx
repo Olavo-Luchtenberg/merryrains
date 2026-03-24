@@ -130,6 +130,7 @@ export function BibliotecaContent({ hasPurchase }: { hasPurchase: boolean }) {
                     src={LIVRO.cover}
                     alt={LIVRO.title}
                     fill
+                    sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 20vw"
                     className="object-cover object-center pointer-events-none transition-transform duration-300 group-hover:scale-[1.03]"
                     draggable={false}
                   />
@@ -236,6 +237,7 @@ export function BibliotecaContent({ hasPurchase }: { hasPurchase: boolean }) {
                     src={coverSrc}
                     alt={`Capa do capítulo ${numero}`}
                     fill
+                    sizes="(max-width: 640px) 50vw, (max-width: 1024px) 50vw, 20vw"
                     className={`object-cover object-center pointer-events-none ${
                       !isDisponivel ? "grayscale-[0.4] opacity-80" : ""
                     }`}

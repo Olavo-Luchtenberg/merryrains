@@ -11,9 +11,11 @@ interface ParallaxSectionProps {
 export function ParallaxSection({ children, className = "", speed = 0.3 }: ParallaxSectionProps) {
   const ref = useRef<HTMLDivElement>(null)
   const [offset, setOffset] = useState(0)
+  const rafRef = useRef<number | null>(null)
+  const tickingRef = useRef(false)
 
   useEffect(() => {
-    const handleScroll = () => {
+    const updateOffset = () => {
       if (!ref.current) return
       const rect = ref.current.getBoundingClientRect()
       const windowHeight = window.innerHeight
@@ -23,9 +25,21 @@ export function ParallaxSection({ children, className = "", speed = 0.3 }: Paral
       setOffset(distance * speed)
     }
 
-    window.addEventListener("scroll", handleScroll, { passive: true })
+    const handleScroll = () => {
+      if (tickingRef.current) return
+      tickingRef.current = true
+      rafRef.current = requestAnimationFrame(() => {
+        updateOffset()
+        tickingRef.current = false
+      })
+    }
+
     handleScroll()
-    return () => window.removeEventListener("scroll", handleScroll)
+    window.addEventListener("scroll", handleScroll, { passive: true })
+    return () => {
+      window.removeEventListener("scroll", handleScroll)
+      if (rafRef.current !== null) cancelAnimationFrame(rafRef.current)
+    }
   }, [speed])
 
   return (

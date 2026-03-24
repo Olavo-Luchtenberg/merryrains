@@ -33,8 +33,7 @@ export function SplashImage() {
           fill
           className="object-contain object-center"
           priority
-          sizes="100vw"
-          unoptimized
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 1200px"
         />
       </div>
       <div className="relative w-full flex flex-col items-center flex-1 p-4 sm:p-6 pt-8 sm:pt-10 gap-4 sm:gap-6 justify-center">

@@ -53,8 +53,8 @@ export function ScrollReveal({ children, className = "", delay = 0, direction = 
       style={{
         transform: getTransform(),
         opacity: isVisible ? 1 : 0,
-        transition: `all 0.9s cubic-bezier(0.16, 1, 0.3, 1) ${delay}ms`,
-        willChange: "transform, opacity",
+        transition: `transform 0.9s cubic-bezier(0.16, 1, 0.3, 1) ${delay}ms, opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1) ${delay}ms`,
+        willChange: isVisible ? "auto" : "transform, opacity",
       }}
     >
       {children}

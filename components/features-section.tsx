@@ -8,26 +8,42 @@ export function FeaturesSection() {
   const [scrollProgress, setScrollProgress] = useState(0)
 
   useEffect(() => {
+    let ticking = false
+    let rafId: number | null = null
+
     const handleScroll = () => {
-      if (!sectionRef.current) return
-      const rect = sectionRef.current.getBoundingClientRect()
-      const windowHeight = window.innerHeight
-      const progress = Math.max(0, Math.min(1, 1 - (rect.top + rect.height * 0.3) / windowHeight))
-      setScrollProgress(progress)
+      if (ticking || !sectionRef.current) return
+      ticking = true
+      rafId = requestAnimationFrame(() => {
+        if (!sectionRef.current) return
+        const rect = sectionRef.current.getBoundingClientRect()
+        const windowHeight = window.innerHeight
+        const progress = Math.max(0, Math.min(1, 1 - (rect.top + rect.height * 0.3) / windowHeight))
+        setScrollProgress(progress)
+        ticking = false
+      })
     }
 
+    handleScroll()
     window.addEventListener("scroll", handleScroll, { passive: true })
-    return () => window.removeEventListener("scroll", handleScroll)
+    return () => {
+      window.removeEventListener("scroll", handleScroll)
+      if (rafId !== null) cancelAnimationFrame(rafId)
+    }
   }, [])
 
   return (
     <section ref={sectionRef} className="relative py-16 sm:py-24 md:py-32 px-4 sm:px-6">
-      {/* Horizontal reveal line */}
+      {/* Horizontal reveal line - usa transform para evitar reflow */}
       <div className="max-w-6xl mx-auto mb-8 sm:mb-12 md:mb-16">
         <div className="h-px bg-border relative overflow-hidden">
           <div
-            className="absolute top-0 left-0 h-full bg-primary"
-            style={{ width: `${scrollProgress * 100}%`, transition: "width 0.15s linear" }}
+            className="absolute top-0 left-0 h-full w-full bg-primary origin-left"
+            style={{
+              transform: `scaleX(${scrollProgress})`,
+              transition: "transform 0.15s linear",
+              willChange: "transform",
+            }}
             aria-hidden="true"
           />
         </div>

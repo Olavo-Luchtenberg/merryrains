@@ -2,9 +2,10 @@
 
 import { useEffect, useState, useRef } from "react"
 import { ChevronDown } from "lucide-react"
+import { useThrottledScroll } from "@/lib/use-throttled-scroll"
 
 export function HeroSection() {
-  const [scrollY, setScrollY] = useState(0)
+  const scrollY = useThrottledScroll()
   const [viewportHeight, setViewportHeight] = useState(800)
   const [mousePos, setMousePos] = useState({ x: 0.5, y: 0.5 })
   const heroRef = useRef<HTMLElement>(null)
@@ -23,20 +24,14 @@ export function HeroSection() {
   }, [])
 
   useEffect(() => {
-    const handleScroll = () => setScrollY(window.scrollY)
     const handleMouse = (e: MouseEvent) => {
       setMousePos({
         x: e.clientX / window.innerWidth,
         y: e.clientY / window.innerHeight,
       })
     }
-
-    window.addEventListener("scroll", handleScroll, { passive: true })
-    window.addEventListener("mousemove", handleMouse)
-    return () => {
-      window.removeEventListener("scroll", handleScroll)
-      window.removeEventListener("mousemove", handleMouse)
-    }
+    window.addEventListener("mousemove", handleMouse, { passive: true })
+    return () => window.removeEventListener("mousemove", handleMouse)
   }, [])
 
   const heroScrollY = Math.max(0, scrollY - viewportHeight)

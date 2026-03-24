@@ -90,7 +90,11 @@ export function RainEffect({ showSplash = false }: { showSplash?: boolean }) {
   const initDrops = useCallback((width: number, height: number) => {
     const drops: RainDrop[] = []
     const divisor = width < 640 ? 12000 : 5000
-    const count = Math.floor((width * height) / divisor)
+    let count = Math.floor((width * height) / divisor)
+    const mem = (navigator as { deviceMemory?: number }).deviceMemory
+    const cores = navigator.hardwareConcurrency ?? 4
+    if (mem !== undefined && mem < 4) count = Math.floor(count * 0.5)
+    else if (cores < 4) count = Math.floor(count * 0.7)
     for (let i = 0; i < count; i++) {
       drops.push(createDrop(width, height, true))
     }

@@ -68,6 +68,7 @@ export function CtaSection() {
                 src="/images/book-cover.jpg"
                 alt="MERRY RAINS"
                 fill
+                sizes="(max-width: 640px) 160px, (max-width: 768px) 200px, 240px"
                 className="object-cover"
               />
             </div>

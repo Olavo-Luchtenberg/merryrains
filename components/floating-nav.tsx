@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import { Menu } from "lucide-react"
 import { useSoundtrack } from "@/lib/soundtrack-context"
 import {
@@ -32,24 +32,38 @@ export function FloatingNav() {
   }
 
   useEffect(() => {
-    const handleScroll = () => {
-      setVisible(window.scrollY > 500)
+    let ticking = false
+    let rafId: number | null = null
 
-      const sections = ["previa", "diferencial", "autor", "comprar"]
-      for (const section of sections.reverse()) {
-        const el = document.getElementById(section)
-        if (el) {
-          const rect = el.getBoundingClientRect()
-          if (rect.top <= window.innerHeight / 2) {
-            setActiveSection(section)
-            break
+    const handleScroll = () => {
+      if (ticking) return
+      ticking = true
+      rafId = requestAnimationFrame(() => {
+        const y = window.scrollY
+        setVisible(y > 500)
+
+        const sections = ["previa", "diferencial", "autor", "comprar"]
+        const halfH = window.innerHeight / 2
+        for (const section of sections.reverse()) {
+          const el = document.getElementById(section)
+          if (el) {
+            const rect = el.getBoundingClientRect()
+            if (rect.top <= halfH) {
+              setActiveSection(section)
+              break
+            }
           }
         }
-      }
+        ticking = false
+      })
     }
 
+    handleScroll()
     window.addEventListener("scroll", handleScroll, { passive: true })
-    return () => window.removeEventListener("scroll", handleScroll)
+    return () => {
+      window.removeEventListener("scroll", handleScroll)
+      if (rafId !== null) cancelAnimationFrame(rafId)
+    }
   }, [])
 
   const navLinks = (

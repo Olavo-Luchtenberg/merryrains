@@ -341,6 +341,8 @@ export function BookReader({ chapter }: BookReaderProps) {
                 alt={`Página ${i + 1} - ${chapter.title}`}
                 className="w-full h-full object-contain object-center"
                 draggable={false}
+                loading={i < 4 ? "eager" : "lazy"}
+                decoding="async"
                 onContextMenu={(e) => e.preventDefault()}
               />
             </div>
