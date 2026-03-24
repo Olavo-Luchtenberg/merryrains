@@ -2,6 +2,7 @@
 
 import React, { useRef, useState, useEffect, useCallback, useMemo } from "react"
 import Link from "next/link"
+import Image from "next/image"
 import HTMLFlipBook from "react-pageflip"
 import { ChevronLeft, ChevronRight, Maximize2, Minimize2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
@@ -333,17 +334,18 @@ export function BookReader({ chapter }: BookReaderProps) {
           {pageImages.map((src, i) => (
             <div
               key={i}
-              className="book-page-wrapper w-full h-full overflow-hidden bg-[#1a1a1a] border-0 shadow-none"
+              className="book-page-wrapper relative w-full h-full overflow-hidden bg-[#1a1a1a] border-0 shadow-none"
+              onContextMenu={(e) => e.preventDefault()}
             >
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
+              <Image
                 src={src}
                 alt={`Página ${i + 1} - ${chapter.title}`}
-                className="w-full h-full object-contain object-center"
+                fill
+                sizes="(max-width: 768px) 50vw, 400px"
+                className="object-contain object-center select-none"
+                priority={i < 4}
+                quality={80}
                 draggable={false}
-                loading={i < 4 ? "eager" : "lazy"}
-                decoding="async"
-                onContextMenu={(e) => e.preventDefault()}
               />
             </div>
           ))}
@@ -377,8 +379,9 @@ export function BookReader({ chapter }: BookReaderProps) {
       </div>
 
       <div className="flex flex-col items-center gap-2">
-        <p className="text-xs text-muted-foreground">
-          Setas, WASD ou scroll do mouse para virar
+        <p className="text-xs text-muted-foreground text-center">
+          <span className="md:hidden">Toque nas setas ou deslize para virar</span>
+          <span className="hidden md:inline">Setas, WASD ou scroll do mouse para virar</span>
         </p>
         <Link
           href="/biblioteca"
